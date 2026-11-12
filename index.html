@@ -1,0 +1,759 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>크리스마스 초대장</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gaegu:wght@300;400;700&family=Single+Day&display=swap">
+<style>
+  :root{
+    --snow:#FFFDFA; --paper:#FFF6EE; --ink:#3A2A2A; --soft:#8A6F6F;
+    --red:#D9414A; --red-deep:#B62F38; --red-light:#FBE4E4;
+    --green:#2E7D4F; --green-deep:#1F5E3A; --green-light:#DDEFE2;
+    --yellow:#F3C14B; --line:#E8D9D0;
+    --hand:'Gaegu','Nanum Pen Script','Apple SD Gothic Neo',sans-serif;
+    --title:'Single Day','Gaegu','Apple SD Gothic Neo',sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--green);color:var(--ink);
+    font-family:var(--hand);font-weight:400;font-size:19px;line-height:1.6;
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(255,255,255,.18) 0 2px, transparent 3px),
+      radial-gradient(circle at 70% 30%, rgba(255,255,255,.16) 0 2px, transparent 3px),
+      radial-gradient(circle at 40% 70%, rgba(255,255,255,.14) 0 1.5px, transparent 2.5px),
+      radial-gradient(circle at 85% 80%, rgba(255,255,255,.18) 0 2px, transparent 3px);
+    background-size:220px 220px, 260px 260px, 180px 180px, 300px 300px;
+    min-height:100vh;overflow-x:hidden;transition:background-color .4s;
+  }
+  body.danger{background-color:#2A0E10}
+  .wrap{max-width:430px;margin:0 auto;padding:22px 14px 70px;position:relative;z-index:1}
+  @media (min-width:560px){.wrap{padding:44px 14px 90px}}
+  [hidden]{display:none!important}
+
+  .snow{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+  .snow i{position:absolute;top:-12px;display:block;width:8px;height:8px;border-radius:50%;background:#fff;opacity:.85;animation:fall linear infinite}
+  @keyframes fall{to{transform:translateY(110vh) translateX(20px)}}
+
+  .card{
+    background:var(--snow);border:3px solid var(--ink);
+    border-radius:38px 30px 42px 28px / 30px 42px 28px 38px;
+    box-shadow:6px 7px 0 var(--red-deep);position:relative;padding:14px;
+  }
+  .card::before{content:"";position:absolute;inset:8px;border:2px dashed var(--red);border-radius:32px 24px 36px 22px / 24px 36px 22px 32px;pointer-events:none}
+  .inner{padding:30px 18px 28px;text-align:center;position:relative}
+  .garland{display:flex;justify-content:center;gap:10px;margin-bottom:12px}
+  .garland b{width:14px;height:14px;border-radius:50%;display:block}
+  .garland b:nth-child(odd){background:var(--red)}
+  .garland b:nth-child(even){background:var(--green)}
+  .garland b:nth-child(3){background:var(--yellow)}
+  .snowman{display:block;width:200px;max-width:70%;height:auto;margin:4px auto 6px}
+  h1{font-family:var(--title);font-weight:400;font-size:46px;line-height:1.15;margin:8px 0 2px;color:var(--red);text-wrap:balance;text-shadow:2px 2px 0 var(--red-light);transform:rotate(-1.5deg)}
+  .hello{font-weight:700;font-size:34px;line-height:1.3;margin:4px 0 0;color:var(--green);transform:rotate(1deg);display:inline-block}
+
+  /* ---- gate / quiz ---- */
+  .gate h1{font-size:38px;transform:rotate(-1deg)}
+  .gate .sub{margin:0 0 14px;color:var(--soft);font-size:17px}
+  .steps{display:flex;justify-content:center;gap:8px;margin:0 0 18px}
+  .steps b{width:12px;height:12px;border-radius:50%;border:2px solid var(--ink);background:var(--snow);display:block}
+  .steps b.on{background:var(--green)}
+  .steps b.now{background:var(--red)}
+  .q{font-weight:700;font-size:25px;line-height:1.35;margin:0 0 16px;color:var(--ink);text-wrap:balance}
+  .opts{display:grid;gap:10px;margin:0;padding:0;list-style:none;text-align:left}
+  .opt{
+    appearance:none;cursor:pointer;width:100%;text-align:left;
+    font-family:var(--hand);font-size:19px;font-weight:400;color:var(--ink);
+    background:var(--paper);border:2px solid var(--ink);padding:10px 14px;
+    border-radius:18px 12px 16px 12px / 12px 16px 12px 18px;box-shadow:3px 3px 0 var(--green-light);
+    display:flex;gap:10px;align-items:center;transition:transform .12s, box-shadow .12s;
+  }
+  .opt .k{width:26px;height:26px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center;font-weight:700;font-size:15px;background:#fff;flex:none}
+  .opt:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--red-light)}
+  .opt:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--green-light)}
+  .opt:focus-visible{outline:3px solid var(--yellow);outline-offset:3px}
+  .opt.ok{background:var(--green-light);border-color:var(--green)}
+  .ok-msg{min-height:1.6em;margin:12px 0 0;color:var(--green-deep);font-weight:700;font-size:19px}
+
+  /* roulette */
+  .spy{text-align:center}
+  .spy h1{color:var(--red);font-size:40px}
+  .spy p{margin:6px 0 0;font-size:20px}
+  .gun{display:block;width:180px;height:180px;margin:14px auto 6px}
+  .cyl{transform-origin:100px 100px}
+  .spin .cyl{animation:spin 1.6s cubic-bezier(.2,.8,.2,1) forwards}
+  @keyframes spin{to{transform:rotate(1500deg)}}
+  .bang{font-family:var(--title);font-size:72px;line-height:1;color:var(--red);margin:4px 0 0;display:none;transform:rotate(-6deg)}
+  .bang.show{display:block;animation:pop .35s ease}
+  @keyframes pop{0%{transform:scale(.3) rotate(-20deg);opacity:0}60%{transform:scale(1.25) rotate(-4deg);opacity:1}100%{transform:scale(1) rotate(-6deg)}}
+  .flash{position:fixed;inset:0;background:#D9414A;opacity:0;pointer-events:none;z-index:5}
+  .flash.on{animation:flash .5s ease}
+  @keyframes flash{0%{opacity:0}30%{opacity:.9}100%{opacity:0}}
+  .locked{padding:20px 0 6px}
+  .locked .big{font-size:60px;line-height:1}
+
+  /* ---- RSVP ---- */
+  .rsvp{margin:26px 0 0}
+  .btn-join{
+    appearance:none;cursor:pointer;width:164px;height:164px;border-radius:50% 48% 52% 50% / 52% 50% 50% 48%;
+    border:3px solid var(--ink);background:radial-gradient(circle at 35% 30%, #F07078, var(--red) 55%, var(--red-deep));
+    color:#fff;font-family:var(--hand);font-weight:700;font-size:34px;line-height:1.1;box-shadow:5px 6px 0 var(--green-deep);
+    display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .btn-join small{font-size:16px;font-weight:400;opacity:.95}
+  .btn-join:hover{transform:translate(-2px,-2px) rotate(-2deg);box-shadow:7px 8px 0 var(--green-deep)}
+  .btn-join:active{transform:translate(2px,3px);box-shadow:2px 2px 0 var(--green-deep)}
+  .btn-join:focus-visible,.btn-small:focus-visible,.link:focus-visible,.dest:focus-visible,.back:focus-visible{outline:3px solid var(--yellow);outline-offset:4px}
+  .btn-small{appearance:none;background:none;border:0;cursor:pointer;font-family:var(--hand);font-size:16px;color:var(--soft);text-decoration:underline wavy;text-underline-offset:5px;text-decoration-color:var(--line);padding:6px 10px;margin-top:16px}
+  .btn-small:hover{color:var(--ink);text-decoration-color:var(--red)}
+  .btn-small.again{border:2px solid var(--ink);border-radius:20px 14px 18px 12px / 14px 18px 12px 20px;text-decoration:none;padding:6px 18px;color:var(--ink);background:var(--paper);font-size:17px;box-shadow:3px 3px 0 var(--green)}
+  .btn-small.again:hover{box-shadow:4px 4px 0 var(--red)}
+  .btn-small.again:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--green)}
+  .nag{margin:14px auto 0;min-height:1.6em;font-size:19px;color:var(--green-deep);max-width:26ch;text-wrap:balance;line-height:1.5}
+  .nag .count{color:var(--soft);font-size:14px;display:block;margin-top:2px}
+  .accepted{display:none;margin:0 auto;font-size:21px;color:var(--green-deep);line-height:1.5}
+  .accepted b{display:block;font-size:44px;line-height:1;margin-bottom:4px;color:var(--red);font-family:var(--title);font-weight:400}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px) rotate(-2deg)}75%{transform:translateX(4px) rotate(2deg)}}
+  .shake{animation:shake .3s ease}
+
+  /* ---- plan ---- */
+  #plan{margin-top:22px}
+  .sheet{background:var(--snow);border:3px solid var(--ink);border-radius:26px 20px 30px 18px / 20px 30px 18px 26px;padding:24px 20px;margin-top:16px;box-shadow:5px 6px 0 var(--green-deep)}
+  .sheet.red{box-shadow:5px 6px 0 var(--red-deep)}
+  .sheet .kicker{display:inline-block;font-size:14px;font-weight:700;letter-spacing:.06em;color:#fff;background:var(--green);padding:1px 12px;border-radius:14px 10px 12px 10px / 10px 12px 10px 14px;margin:0 0 8px;transform:rotate(-1.5deg)}
+  .sheet.red .kicker{background:var(--red)}
+  .sheet h2{font-family:var(--title);font-weight:400;font-size:30px;line-height:1.2;margin:0 0 6px;color:var(--ink);text-wrap:balance}
+  .sheet p{margin:8px 0;word-break:keep-all}
+  .sheet p.lead{font-size:19px;line-height:1.65}
+  .sheet p.who{margin:0 0 4px;font-size:15px;color:var(--soft)}
+  .sheet a.go{display:inline-block;margin-top:6px;font-weight:700;font-size:17px;color:var(--red);text-decoration:underline wavy;text-underline-offset:4px;text-decoration-color:var(--red-light)}
+  .sheet a.go:hover{text-decoration-color:var(--red)}
+  .top-meta{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:8px;font-size:18px}
+  .top-meta li{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start}
+  .top-meta .ic{font-size:20px;line-height:1.5}
+  .top-meta b{font-weight:700;color:var(--red)}
+  .letter{font-size:19px;line-height:1.8;margin:14px 0 0;padding:14px 16px;background:var(--paper);border:2px dashed var(--line);border-radius:18px 14px 20px 12px / 14px 20px 12px 18px;word-break:keep-all}
+  .letter em{font-style:normal;color:var(--red);font-weight:700}
+
+  /* destination picker */
+  .dests{display:grid;gap:12px;margin-top:12px}
+  .dest{
+    appearance:none;cursor:pointer;width:100%;text-align:left;font-family:var(--hand);color:var(--ink);
+    display:grid;grid-template-columns:44px 1fr 22px;gap:10px;align-items:start;
+    padding:14px 12px 12px 12px;border:2px solid var(--ink);background:var(--paper);
+    border-radius:20px 14px 18px 12px / 14px 18px 12px 20px;box-shadow:4px 4px 0 var(--green-light);
+    transition:transform .15s, box-shadow .15s;
+  }
+  .dest:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--red-light)}
+  .dest:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--green-light)}
+  .dest .em{font-size:30px;line-height:1.2}
+  .dest .body{display:grid;gap:2px}
+  .dest .nm{font-weight:700;font-size:22px;line-height:1.2}
+  .dest .nm small{font-weight:400;font-size:14px;color:var(--soft);margin-left:4px}
+  .dest .tt{font-family:var(--title);font-size:20px;color:var(--red);line-height:1.2}
+  .dest .bl{font-size:16px;color:var(--ink);line-height:1.5;word-break:keep-all}
+  .dest .chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+  .dest .chips li{list-style:none;font-size:13px;font-weight:700;padding:0 8px;border-radius:10px 8px 9px 7px / 8px 9px 7px 10px;border:2px solid var(--green);color:var(--green-deep);background:var(--green-light)}
+  .dest .arr{font-size:22px;color:var(--red);align-self:center}
+  .back{
+    appearance:none;cursor:pointer;font-family:var(--hand);font-weight:700;font-size:17px;color:#fff;background:var(--red);
+    border:2px solid var(--ink);padding:5px 14px;border-radius:16px 12px 14px 10px / 12px 14px 10px 16px;box-shadow:3px 3px 0 var(--ink);margin:0 0 4px;
+  }
+  .back.bottom{margin-top:18px}
+  .back:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+
+  .day{margin-top:14px}
+  .dayhead{display:flex;align-items:center;gap:10px;margin:0 0 10px;border-bottom:3px dotted var(--line);padding-bottom:8px}
+  .dayhead .n{width:38px;height:38px;border-radius:50% 46% 52% 48%/48% 52% 46% 50%;background:var(--red);color:#fff;display:grid;place-items:center;font-weight:700;font-size:22px;border:2px solid var(--ink);flex:none}
+  .dayhead h3{margin:0;font-size:22px;font-weight:700;line-height:1.2}
+  .dayhead .d{color:var(--soft);font-size:16px;margin-left:auto;white-space:nowrap}
+  .tl{list-style:none;margin:0;padding:0}
+  .tl li{display:grid;grid-template-columns:56px 1fr;gap:10px;padding:10px 0;border-bottom:2px dashed var(--line)}
+  .tl li:last-child{border-bottom:0}
+  .tl time{font-weight:700;font-size:19px;color:var(--green);font-variant-numeric:tabular-nums;line-height:1.4}
+  .tl .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .tl .ic{font-size:20px;line-height:1;flex:none}
+  .tl .tag{font-size:13px;font-weight:700;line-height:1.3;padding:1px 8px;border-radius:10px 8px 9px 7px / 8px 9px 7px 10px;border:2px solid currentColor;color:var(--green);background:var(--green-light);flex:none}
+  .tl .tag.move{color:#5B6B7A;background:#E9EEF3}
+  .tl .tag.meal{color:var(--red);background:var(--red-light)}
+  .tl .tag.stay{color:#7A5A2A;background:#F6ECDA}
+  .tl .tag.spa{color:#3B6F9A;background:#DFEDF8}
+  .tl .tag.shop{color:#8A4B9A;background:#F1E4F6}
+  .tl .tag.sweet{color:#C2577A;background:#FBE4EC}
+  .tl .what{font-weight:700;font-size:18px;line-height:1.4;margin-top:2px}
+  .tl .how{font-size:16px;color:var(--soft);margin-top:1px;line-height:1.55;word-break:keep-all}
+  .tl .sun{color:var(--red)}
+
+  .links{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:8px}
+  .link{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:10px 14px;border:2px solid var(--ink);background:var(--paper);border-radius:18px 12px 16px 12px / 12px 16px 12px 18px;text-decoration:none;color:var(--ink);box-shadow:3px 3px 0 var(--green-light);transition:transform .15s, box-shadow .15s}
+  .link:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--red-light)}
+  .link .t{font-weight:700;font-size:18px;line-height:1.3}
+  .link .s{font-size:15px;color:var(--soft);display:block;margin-top:1px}
+  .link .arr{font-size:22px;color:var(--red)}
+  .note{margin:14px 0 0;padding:12px 14px;background:var(--red-light);border:2px solid var(--red);border-radius:16px 12px 18px 10px / 12px 18px 10px 16px;font-size:16.5px;line-height:1.6;word-break:keep-all}
+  .note.green{background:var(--green-light);border-color:var(--green)}
+  .check{list-style:none;padding:0;margin:10px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;font-size:17px}
+  .check li{display:flex;gap:8px;align-items:center}
+  .check li::before{content:"";width:16px;height:16px;border:2px solid var(--green);border-radius:5px 3px 6px 3px;flex:none;background:#fff}
+  .foot{text-align:center;margin-top:30px;color:#fff;font-size:20px;line-height:1.5}
+  .foot .k{display:block;font-size:17px;opacity:.95}
+
+  @media (prefers-reduced-motion: reduce){
+    .btn-join,.link,.dest{transition:none}
+    .shake,.spin .cyl,.bang.show,.flash.on{animation:none}
+    .snow{display:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="snow" aria-hidden="true">
+  <i style="left:6%;animation-duration:11s;animation-delay:-2s;width:6px;height:6px"></i>
+  <i style="left:15%;animation-duration:14s;animation-delay:-7s"></i>
+  <i style="left:24%;animation-duration:12s;animation-delay:-4s;width:5px;height:5px"></i>
+  <i style="left:33%;animation-duration:16s;animation-delay:-9s;width:9px;height:9px"></i>
+  <i style="left:42%;animation-duration:13s;animation-delay:-1s"></i>
+  <i style="left:51%;animation-duration:15s;animation-delay:-11s;width:6px;height:6px"></i>
+  <i style="left:60%;animation-duration:12s;animation-delay:-5s"></i>
+  <i style="left:69%;animation-duration:17s;animation-delay:-8s;width:7px;height:7px"></i>
+  <i style="left:78%;animation-duration:13s;animation-delay:-3s;width:5px;height:5px"></i>
+  <i style="left:87%;animation-duration:15s;animation-delay:-10s"></i>
+  <i style="left:94%;animation-duration:12s;animation-delay:-6s;width:6px;height:6px"></i>
+</div>
+<div class="flash" id="flash" aria-hidden="true"></div>
+
+<div class="wrap">
+
+  <!-- ================= GATE ================= -->
+  <div class="card gate" id="gate">
+    <div class="inner">
+      <div class="garland" aria-hidden="true"><b></b><b></b><b></b><b></b><b></b></div>
+      <div id="quiz">
+        <h1>세훈임을 인증해보시죠</h1>
+        <p class="sub">세 문제 다 맞혀야 초대장이 열려요</p>
+        <div class="steps" id="steps" aria-hidden="true"><b class="now"></b><b></b><b></b></div>
+        <p class="q" id="qText"></p>
+        <ul class="opts" id="opts"></ul>
+        <p class="ok-msg" id="okMsg" aria-live="polite"></p>
+      </div>
+      <div class="spy" id="spy" hidden>
+        <h1>간첩은 나가주세요.</h1>
+        <p>신원 확인 실패. 절차대로 진행합니다.</p>
+        <svg class="gun" viewBox="0 0 200 200" role="img" aria-label="돌아가는 리볼버 실린더" xmlns="http://www.w3.org/2000/svg">
+          <g class="cyl">
+            <circle cx="100" cy="100" r="78" fill="#4A4A52" stroke="#3A2A2A" stroke-width="4"/>
+            <circle cx="100" cy="100" r="62" fill="#5C5C66" stroke="#3A2A2A" stroke-width="2"/>
+            <g fill="#1E1E24" stroke="#3A2A2A" stroke-width="2.5">
+              <circle cx="100" cy="48" r="13"/><circle cx="145" cy="74" r="13"/><circle cx="145" cy="126" r="13"/>
+              <circle cx="100" cy="152" r="13"/><circle cx="55" cy="126" r="13"/><circle cx="55" cy="74" r="13"/>
+            </g>
+            <circle cx="100" cy="48" r="7" fill="#D9414A"/>
+            <circle cx="100" cy="100" r="10" fill="#2A2A30" stroke="#3A2A2A" stroke-width="2"/>
+          </g>
+          <path d="M100 6 l-9 14 h18 z" fill="#D9414A" stroke="#3A2A2A" stroke-width="2"/>
+        </svg>
+        <p class="bang" id="bang">탕!</p>
+      </div>
+      <div class="spy locked" id="locked" hidden>
+        <p class="big">🚫</p>
+        <h1>간첩은 나가주세요.</h1>
+        <p>이 초대장은 세훈이만 볼 수 있어요.<br>세훈이라면 링크를 다시 열어 처음부터 인증해주세요.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= INVITE ================= -->
+  <div class="card" id="invite" hidden>
+    <div class="inner">
+      <div class="garland" aria-hidden="true"><b></b><b></b><b></b><b></b><b></b></div>
+      <svg class="snowman" viewBox="0 0 200 230" role="img" aria-label="빨간 목도리를 두른 귀여운 눈사람" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="100" cy="214" rx="78" ry="10" fill="#E6EEF5"/>
+        <path d="M100 222c-38 0-62-20-62-48 0-27 24-48 62-48s62 21 62 48c0 28-24 48-62 48z" fill="#fff" stroke="#3A2A2A" stroke-width="3"/>
+        <circle cx="100" cy="150" r="4" fill="#2E7D4F"/><circle cx="100" cy="168" r="4" fill="#D9414A"/><circle cx="100" cy="186" r="4" fill="#2E7D4F"/>
+        <g stroke="#7A4B2A" stroke-width="3.2" stroke-linecap="round" fill="none">
+          <path d="M44 160 L16 138"/><path d="M26 146 L18 132"/><path d="M26 146 L12 150"/>
+          <path d="M156 160 L184 138"/><path d="M174 146 L182 132"/><path d="M174 146 L188 150"/>
+        </g>
+        <path d="M100 128c-27 0-44-16-44-38s17-40 44-40 44 18 44 40-17 38-44 38z" fill="#fff" stroke="#3A2A2A" stroke-width="3"/>
+        <path d="M58 118c10 10 28 15 42 15s32-5 42-15c-6 12-22 20-42 20s-36-8-42-20z" fill="#D9414A" stroke="#3A2A2A" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M120 128 l18 30 c2 3-1 6-4 5 l-20 -12 z" fill="#D9414A" stroke="#3A2A2A" stroke-width="2.5" stroke-linejoin="round"/>
+        <g stroke="#fff" stroke-width="2" opacity=".8"><path d="M124 140 l6 10"/><path d="M130 136 l6 10"/></g>
+        <circle cx="86" cy="86" r="3.6" fill="#3A2A2A"/><circle cx="114" cy="86" r="3.6" fill="#3A2A2A"/>
+        <circle cx="87.5" cy="84.5" r="1.1" fill="#fff"/><circle cx="115.5" cy="84.5" r="1.1" fill="#fff"/>
+        <ellipse cx="74" cy="98" rx="7" ry="4.5" fill="#F7B2B7" opacity=".9"/><ellipse cx="126" cy="98" rx="7" ry="4.5" fill="#F7B2B7" opacity=".9"/>
+        <path d="M100 92 L128 98 L100 102 z" fill="#F08A3C" stroke="#3A2A2A" stroke-width="2.2" stroke-linejoin="round"/>
+        <path d="M90 108 q10 7 20 0" fill="none" stroke="#3A2A2A" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M66 58 q34 -10 68 0 l-4 -8 q-30 -8 -60 0 z" fill="#2E7D4F" stroke="#3A2A2A" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M74 52 c0 -22 10 -36 26 -36 s26 14 26 36 q-26 -8 -52 0 z" fill="#2E7D4F" stroke="#3A2A2A" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M74 52 q26 -8 52 0 l0 7 q-26 -8 -52 0 z" fill="#D9414A" stroke="#3A2A2A" stroke-width="2.2" stroke-linejoin="round"/>
+        <circle cx="100" cy="17" r="6" fill="#fff" stroke="#3A2A2A" stroke-width="2.2"/>
+        <path d="M120 44 q6 -8 14 -4 q-6 2 -8 10 z" fill="#2E7D4F" stroke="#3A2A2A" stroke-width="1.6"/>
+        <circle cx="121" cy="48" r="2.6" fill="#D9414A"/><circle cx="126" cy="50" r="2.4" fill="#D9414A"/>
+        <path d="M150 84 c-6 -8 -16 0 -8 8 l8 7 l8 -7 c8 -8 -2 -16 -8 -8z" fill="#9FD3F2" stroke="#3A2A2A" stroke-width="1.8" transform="rotate(12 150 88)"/>
+        <g stroke="#9FC7E8" stroke-width="1.6" stroke-linecap="round" fill="none">
+          <path d="M30 60 v12 M24 66 h12 M26 62 l8 8 M34 62 l-8 8"/>
+          <path d="M172 24 v10 M167 29 h10 M168.5 25.5 l7 7 M175.5 25.5 l-7 7"/>
+          <path d="M22 104 v8 M18 108 h8"/>
+        </g>
+      </svg>
+      <h1>크리스마스 초대장</h1>
+      <p class="hello">나랑 놀자 🩵</p>
+      <div class="rsvp" id="rsvp">
+        <button class="btn-join" id="joinBtn" type="button">함께하기<small>좋아!</small></button>
+        <br>
+        <button class="btn-small" id="declineBtn" type="button">거절하기</button>
+        <button class="btn-small again" id="againBtn" type="button" hidden>다시 생각하기</button>
+        <p class="nag" id="nag" aria-live="polite"></p>
+        <p class="accepted" id="accepted"><b>야호!</b>함께하기로 했어요.<br>아래에서 어디 갈지 골라줘.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PLAN ================= -->
+  <section id="plan" hidden aria-label="여행 계획">
+    <section class="view" id="pick">
+      <div class="sheet red">
+        <span class="kicker">우리 어디 가?</span>
+        <h2>다섯 곳 중에 골라줘</h2>
+        <ul class="top-meta">
+          <li><span class="ic">📅</span><span><b>12월 25일(금) ~ 26일(토)</b> 1박 2일</span></li>
+          <li><span class="ic">🤫</span><span>사람 안 붐비는 조용한 곳, 분위기 좋은 숙소, 1~2시간씩 걷는 자연</span></li>
+          <li><span class="ic">🎂</span><span>밤에는 우리가 가져온 케이크와 와인을 룸에서</span></li>
+        </ul>
+        <p class="letter">
+          사람 많은 곳 말고,<br>
+          창밖 풍경 보이는 방에서 늦게까지 뒹굴다<br>
+          한 바퀴 걷고 <em>따끈한 욕조</em>에 들어가는 크리스마스.<br>
+          밤엔 케이크에 초를 켜고,<br>
+          다음 날엔 시장에서 맛있는 거 먹자!
+        </p>
+      </div>
+      <div class="sheet">
+        <span class="kicker">여행지 후보</span>
+        <h2>눌러보면 세부 일정이 나와</h2>
+        <div class="dests">
+        <button class="dest" type="button" data-dest="sea">
+          <span class="em">🌊</span>
+          <span class="body">
+            <span class="nm">영종도 <small>인천 · 차로 약 1시간</small></span>
+            <span class="tt">조용한 겨울 바다</span>
+            <span class="bl">갯벌 산책, 석화구이, 자쿠지 테라스. 다음 날엔 차를 배에 싣고 바다를 건너 시장으로.</span>
+            <span class="chips"><li>바다</li><li>갯벌</li><li>석화구이</li><li>차량 페리</li><li>소품샵</li></span>
+          </span>
+          <span class="arr">→</span>
+        </button>
+        <button class="dest" type="button" data-dest="ganghwa">
+          <span class="em">♨️</span>
+          <span class="body">
+            <span class="nm">강화도 <small>인천 강화 · 차로 약 1시간 10분</small></span>
+            <span class="tt">온천과 오래된 골목</span>
+            <span class="bl">1933년 방직공장 카페, 풍물시장, 한옥 성당 골목. 둘째 날은 바다 보이는 노천온천.</span>
+            <span class="chips"><li>노천온천</li><li>풍물시장</li><li>한옥 성당</li><li>동막 일몰</li><li>조개구이</li></span>
+          </span>
+          <span class="arr">→</span>
+        </button>
+        <button class="dest" type="button" data-dest="yangpyeong">
+          <span class="em">🧘</span>
+          <span class="body">
+            <span class="nm">양평 <small>경기 양평 · 차로 약 1시간</small></span>
+            <span class="tt">강, 요가, 장날</span>
+            <span class="bl">두물머리 산책, 집처럼 꾸민 미술관, 아침 요가 클래스. 둘째 날은 딱 장날인 양수리 시장.</span>
+            <span class="chips"><li>아침 요가</li><li>사우나</li><li>두물머리</li><li>양수리 장날</li><li>미술관</li></span>
+          </span>
+          <span class="arr">→</span>
+        </button>
+        <button class="dest" type="button" data-dest="paju">
+          <span class="em">📚</span>
+          <span class="body">
+            <span class="nm">파주 <small>경기 파주 · 차로 약 50분</small></span>
+            <span class="tt">책 숲에서 하룻밤</span>
+            <span class="bl">헤이리 소품샵 골목, 지혜의 숲 서가, 호수 출렁다리. 가장 가깝고 가장 조용한 선택.</span>
+            <span class="chips"><li>북스테이</li><li>헤이리 소품샵</li><li>호수 산책</li><li>출렁다리</li></span>
+          </span>
+          <span class="arr">→</span>
+        </button>
+        <button class="dest" type="button" data-dest="chuncheon">
+          <span class="em">🏞️</span>
+          <span class="body">
+            <span class="nm">춘천 <small>강원 춘천 · 차로 약 1시간 20분</small></span>
+            <span class="tt">호수 옆 작은 마을</span>
+            <span class="bl">의암호 둘레길, 전망대 카페, 옛 극장 골목의 소품샵과 시장. 닭갈비는 덤.</span>
+            <span class="chips"><li>호수 산책</li><li>소품샵 골목</li><li>시장</li><li>닭갈비</li><li>전망 카페</li></span>
+          </span>
+          <span class="arr">→</span>
+        </button>
+        </div>
+        <div class="note green"><b>참고</b> · 크리스마스 당일 숙소는 어디든 빨리 마감돼. 하나 고르면 바로 잡자. 호텔 사우나·온천은 남녀 따로라 수영복 필요 없고, 수영장만 수영복이 필요해.</div>
+      </div>
+      <p class="foot">메리 크리스마스 🎄<span class="k">나랑 놀면 재밌을거야🤍</span></p>
+    </section>
+
+  <section class="view detail" id="detail-sea" hidden aria-label="영종도 세부 일정">
+    <button class="back" type="button" data-back>← 다른 곳도 보기</button>
+    <div class="sheet red">
+      <span class="kicker">🌊 영종도</span>
+      <h2>조용한 겨울 바다</h2>
+      <ul class="top-meta">
+        <li><span class="ic">📅</span><span><b>12월 25일(금) ~ 26일(토)</b> 1박 2일</span></li>
+        <li><span class="ic">📍</span><span><b>영종도</b> · 인천 · 차로 약 1시간</span></li>
+      </ul>
+      <p class="letter">갯벌 산책, 석화구이, 자쿠지 테라스. 다음 날엔 차를 배에 싣고 바다를 건너 시장으로.</p>
+    </div>
+    <div class="sheet">
+      <span class="kicker">우리가 묵을 곳</span>
+      <h2>웨스턴 그레이스 호텔</h2>
+      <p class="who">구읍뱃터 도보 4분 · 전 객실 오션뷰</p>
+      <p class="lead">자쿠지 + 바다 테라스 객실이 있어 수영복 없이 둘만의 스파가 돼. 구읍뱃터가 걸어서 코앞이라 다음 날 소금빵·페리 동선이 제일 편해.</p>
+      <p>조금 더 고급스럽게 가고 싶으면 송도 센트럴파크 안 한옥 호텔 <b>경원재 앰배서더</b>(객실 30개, 아주 조용). 영종도 바다 30분, 개항장 20분이라 일정은 거의 그대로야.</p>
+      <a class="go" href="https://map.naver.com/p/search/%EC%9B%A8%EC%8A%A4%ED%84%B4%EA%B7%B8%EB%A0%88%EC%9D%B4%EC%8A%A4%ED%98%B8%ED%85%94%20%EC%98%81%EC%A2%85" target="_blank" rel="noopener">숙소 보기 →</a>
+    </div>
+    <div class="sheet red">
+      <span class="kicker">일정표</span>
+      <h2>이틀 동안 뭐 하지?</h2>
+      <div class="day">
+        <div class="dayhead"><span class="n">1</span><h3>갯벌, 석화, 자쿠지</h3><span class="d">12.25 금</span></div>
+        <ol class="tl"><li><time>10:30</time><div><div class="row"><span class="ic">🚗</span><span class="tag move">이동</span></div><div class="what">서울 출발</div><div class="how">영종대교 또는 인천대교, 약 1시간. 크리스마스 오전은 바깥 방향이 한산한 편.</div></div></li><li><time>11:40</time><div><div class="row"><span class="ic">🐚</span><span class="tag nature">산책</span></div><div class="what">마시안해변 갯벌 산책</div><div class="how">정오 전후가 간조라 갯벌이 넓게 열려. 을왕리보다 훨씬 조용한 해변. 운동화 추천.</div></div></li><li><time>12:40</time><div><div class="row"><span class="ic">🍽️</span><span class="tag meal">점심</span></div><div class="what">마시안제빵소 or 카페 미음 브런치</div><div class="how">둘 다 통창 오션뷰. 빵과 수프, 커피로 가볍게.</div></div></li><li><time>14:10</time><div><div class="row"><span class="ic">🌊</span><span class="tag nature">산책</span></div><div class="what">선녀바위 해변</div><div class="how">바위 전설이 있는 작은 해변, 20~30분 가볍게. 사람이 거의 없어.</div></div></li><li><time>15:00</time><div><div class="row"><span class="ic">🏨</span><span class="tag stay">체크인</span></div><div class="what">호텔 체크인</div><div class="how">짐 풀고 창가에서 한숨 돌리기. 케이크는 냉장고에.</div></div></li><li><time>16:00</time><div><div class="row"><span class="ic">🚶</span><span class="tag nature">산책</span></div><div class="what">구읍뱃터 바닷길 산책</div><div class="how">방파제 따라 1시간. 해 지기 전 빛이 제일 예뻐.</div></div></li><li><time>17:26</time><div><div class="row"><span class="ic">🌅</span><span class="tag nature">일몰</span></div><div class="what sun">서해 일몰</div><div class="how">만조에 가까운 시간이라 바다가 코앞까지 차 있어.</div></div></li><li><time>18:00</time><div><div class="row"><span class="ic">🦪</span><span class="tag meal">저녁</span></div><div class="what">석화구이 + 조개구이</div><div class="how">선녀바위 회 조개구이(선녀바위로 41) 또는 조개뷰 을왕리(왕산해변 앞). 겨울 석화가 제철. 방어회는 구읍뱃터 수산시장 겨울 입고 확인.</div></div></li><li><time>20:00</time><div><div class="row"><span class="ic">🛁</span><span class="tag spa">스파</span></div><div class="what">객실 자쿠지 · 바다 테라스</div><div class="how">수영복 없이 우리 둘만.</div></div></li><li><time>21:00</time><div><div class="row"><span class="ic">🎂</span><span class="tag sweet">디저트</span></div><div class="what">룸에서 케이크 + 와인</div><div class="how">가져온 케이크에 초 켜고, 와인 한 잔. 크리스마스 밤.</div></div></li></ol>
+      </div>
+      <div class="day">
+        <div class="dayhead"><span class="n">2</span><h3>아침 바다, 배 타고 시장으로</h3><span class="d">12.26 토</span></div>
+        <ol class="tl"><li><time>07:40</time><div><div class="row"><span class="ic">🧘</span><span class="tag nature">아침</span></div><div class="what">일출 07:48 · 창가 스트레칭</div><div class="how">바다 보면서 30분. 그다음 방파제 아침 산책.</div></div></li><li><time>08:40</time><div><div class="row"><span class="ic">🍳</span><span class="tag meal">조식</span></div><div class="what">호텔 조식</div><div class="how">느긋하게.</div></div></li><li><time>11:00</time><div><div class="row"><span class="ic">🚶</span><span class="tag move">이동</span></div><div class="what">체크아웃 → 구읍뱃터</div><div class="how">걸어서 4분.</div></div></li><li><time>11:30</time><div><div class="row"><span class="ic">🥐</span><span class="tag shop">시장</span></div><div class="what">자연도소금빵 · 구읍뱃터 수산시장</div><div class="how">소금빵은 오후면 품절이라 이 시간이 딱. 수산시장에서 겨울 방어 구경.</div></div></li><li><time>12:30</time><div><div class="row"><span class="ic">⛴️</span><span class="tag move">페리</span></div><div class="what">차를 싣고 월미도행 페리</div><div class="how">20분 항해. 토요일 운항 09:30~17:30, 날씨로 결항될 수 있으니 당일 아침 확인.</div></div></li><li><time>13:10</time><div><div class="row"><span class="ic">🍗</span><span class="tag meal">점심</span></div><div class="what">신포국제시장</div><div class="how">월미도에서 차로 10분. 신포닭강정, 40년 만두집, 공갈빵.</div></div></li><li><time>14:10</time><div><div class="row"><span class="ic">🛍️</span><span class="tag shop">소품샵</span></div><div class="what">개항장 산책 · 소품샵</div><div class="how">일본식 목조건물 카페 거리, 소품샵 설레빗(신포로27번길 56), 인천아트플랫폼 전시.</div></div></li><li><time>16:00</time><div><div class="row"><span class="ic">☕</span><span class="tag meal">카페</span></div><div class="what">개항로 카페에서 마무리</div><div class="how">어두워지기 전 한 잔. 서울까지 약 1시간.</div></div></li><li><time>17:30</time><div><div class="row"><span class="ic">🚗</span><span class="tag move">이동</span></div><div class="what">서울 도착</div><div class="how">저녁 전에 집. 남은 소금빵 먹기.</div></div></li></ol>
+      </div>
+      <div class="note green"><b>물때 메모</b> · 12/25 간조는 정오 전후, 만조는 일몰 직전으로 조회됐어. 갯벌 산책 시간은 출발 전날 바다타임에서 한 번 더 확인하자.</div>
+    </div>
+    <div class="sheet">
+      <span class="kicker">세부 링크</span>
+      <h2>눌러서 확인하기</h2>
+      <ul class="links"><li><a class="link" href="https://map.naver.com/p/search/%EB%A7%88%EC%8B%9C%EC%95%88%ED%95%B4%EB%B3%80" target="_blank" rel="noopener"><span><span class="t">마시안해변 지도</span><span class="s">마시안제빵소 · 카페 미음 근처</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%EC%84%A0%EB%85%80%EB%B0%94%EC%9C%84%ED%95%B4%EC%88%98%EC%9A%95%EC%9E%A5" target="_blank" rel="noopener"><span><span class="t">선녀바위 해수욕장</span><span class="s">조용한 바위 해변</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%EC%84%A0%EB%85%80%EB%B0%94%EC%9C%84%20%ED%9A%8C%20%EC%A1%B0%EA%B0%9C%EA%B5%AC%EC%9D%B4" target="_blank" rel="noopener"><span><span class="t">선녀바위 회 조개구이</span><span class="s">석화구이 · 조개구이 · 선녀바위로 41</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%EC%A1%B0%EA%B0%9C%EB%B7%B0%20%EC%9D%84%EC%99%95%EB%A6%AC" target="_blank" rel="noopener"><span><span class="t">조개뷰 을왕리</span><span class="s">왕산해변 앞 · 바다뷰 조개구이</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%EC%9E%90%EC%97%B0%EB%8F%84%EC%86%8C%EA%B8%88%EB%B9%B5" target="_blank" rel="noopener"><span><span class="t">자연도소금빵 · 구읍뱃터</span><span class="s">오후 품절 주의 · 수산시장 옆</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%EC%98%81%EC%A2%85%EB%8F%84%20%EC%9B%94%EB%AF%B8%EB%8F%84%20%EC%B0%A8%EB%9F%89%EC%84%A0%EC%A0%81" target="_blank" rel="noopener"><span><span class="t">구읍뱃터 → 월미도 차량 페리</span><span class="s">운항 시간 · 결항 여부 당일 확인</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%EC%8B%A0%ED%8F%AC%EA%B5%AD%EC%A0%9C%EC%8B%9C%EC%9E%A5" target="_blank" rel="noopener"><span><span class="t">신포국제시장</span><span class="s">인천 중구 신포동 6-6</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%EC%9D%B8%EC%B2%9C%EC%95%84%ED%8A%B8%ED%94%8C%EB%9E%AB%ED%8F%BC" target="_blank" rel="noopener"><span><span class="t">인천아트플랫폼 · 개항장 거리</span><span class="s">전시 · 소품샵 · 카페 거리</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%EA%B2%BD%EC%9B%90%EC%9E%AC%20%EC%95%B0%EB%B0%B0%EC%84%9C%EB%8D%94%20%EC%9D%B8%EC%B2%9C" target="_blank" rel="noopener"><span><span class="t">경원재 앰배서더 (대안 숙소)</span><span class="s">송도 센트럴파크 한옥 호텔</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://www.badatime.com/158/daily" target="_blank" rel="noopener"><span><span class="t">인천 물때표</span><span class="s">바다타임 · 갯벌 산책 시간 확인</span></span><span class="arr">→</span></a></li></ul>
+    </div>
+    <div class="sheet red">
+      <span class="kicker">챙길 것</span>
+      <h2>가방에 넣자</h2>
+      <ul class="check">
+        <li>케이크 + 초 + 라이터</li><li>와인 + 오프너 + 잔</li><li>따뜻한 양말, 비니</li><li>요가 가능한 편한 옷</li><li>걷기 좋은 운동화</li><li>입욕제</li><li>카메라</li><li>간식 담을 가방</li>
+      </ul>
+    </div>
+    <button class="back bottom" type="button" data-back>← 다른 곳도 보기</button>
+    <p class="foot">메리 크리스마스 🎄<span class="k">나랑 놀면 재밌을거야🤍</span></p>
+  </section>
+  <section class="view detail" id="detail-ganghwa" hidden aria-label="강화도 세부 일정">
+    <button class="back" type="button" data-back>← 다른 곳도 보기</button>
+    <div class="sheet red">
+      <span class="kicker">♨️ 강화도</span>
+      <h2>온천과 오래된 골목</h2>
+      <ul class="top-meta">
+        <li><span class="ic">📅</span><span><b>12월 25일(금) ~ 26일(토)</b> 1박 2일</span></li>
+        <li><span class="ic">📍</span><span><b>강화도</b> · 인천 강화 · 차로 약 1시간 10분</span></li>
+      </ul>
+      <p class="letter">1933년 방직공장 카페, 풍물시장, 한옥 성당 골목. 둘째 날은 바다 보이는 노천온천.</p>
+    </div>
+    <div class="sheet">
+      <span class="kicker">우리가 묵을 곳</span>
+      <h2>호텔 에버리치</h2>
+      <p class="who">강화읍 남산 언덕 · 3만평 부지 산책로</p>
+      <p class="lead">언덕 위라 조용하고 야경이 좋아. 산책로가 호텔 부지 안에 있어서 체크인하고 바로 걸을 수 있고, 조식 뷔페도 괜찮다는 평.</p>
+      <p>수영복 걱정은 없어. 둘째 날 가는 <b>석모도 미네랄온천</b>은 온천복을 입고 들어가는 바다뷰 노천탕이야 (화요일 휴무, 12/26은 토요일).</p>
+      <a class="go" href="https://nol.yanolja.com/stay/domestic/3000946" target="_blank" rel="noopener">숙소 보기 →</a>
+    </div>
+    <div class="sheet red">
+      <span class="kicker">일정표</span>
+      <h2>이틀 동안 뭐 하지?</h2>
+      <div class="day">
+        <div class="dayhead"><span class="n">1</span><h3>방직공장 카페, 골목, 일몰</h3><span class="d">12.25 금</span></div>
+        <ol class="tl"><li><time>10:00</time><div><div class="row"><span class="ic">🚗</span><span class="tag move">이동</span></div><div class="what">서울 출발</div><div class="how">올림픽대로 → 김포 → 강화대교, 약 1시간 10분.</div></div></li><li><time>11:20</time><div><div class="row"><span class="ic">☕</span><span class="tag meal">카페</span></div><div class="what">조양방직 카페</div><div class="how">1933년 방직공장을 그대로 살린 거대한 카페. 평일 11시 오픈 직후가 가장 한산해.</div></div></li><li><time>12:30</time><div><div class="row"><span class="ic">🍲</span><span class="tag meal">점심</span></div><div class="what">강화풍물시장</div><div class="how">젓국갈비, 밴댕이회, 순무김치. 2층 식당가에서 먹고 1층 시장 한 바퀴.</div></div></li><li><time>14:00</time><div><div class="row"><span class="ic">🚶</span><span class="tag nature">산책</span></div><div class="what">소창체험관 → 용흥궁 → 성공회 강화성당</div><div class="how">1938년 한옥 염색공장 터와 한옥 성당. 크리스마스에 한옥 성당이라니. 골목 2km, 1시간.</div></div></li><li><time>15:00</time><div><div class="row"><span class="ic">🏨</span><span class="tag stay">체크인</span></div><div class="what">호텔 에버리치 체크인</div><div class="how">케이크는 냉장고에.</div></div></li><li><time>15:30</time><div><div class="row"><span class="ic">🌲</span><span class="tag nature">산책</span></div><div class="what">호텔 부지 산책로</div><div class="how">언덕 위 산책로 40분. 강화읍이 내려다보여.</div></div></li><li><time>16:40</time><div><div class="row"><span class="ic">🚗</span><span class="tag move">이동</span></div><div class="what">동막해변으로</div><div class="how">차로 약 30분. 남쪽 해안.</div></div></li><li><time>17:26</time><div><div class="row"><span class="ic">🌅</span><span class="tag nature">일몰</span></div><div class="what sun">동막해변 일몰</div><div class="how">겨울 동막은 고요하고 석양이 붉어.</div></div></li><li><time>18:00</time><div><div class="row"><span class="ic">🦪</span><span class="tag meal">저녁</span></div><div class="what">동막·선두포구 조개구이 + 석화</div><div class="how">해변 앞 조개구이 집들. 겨울 석화가 제철.</div></div></li><li><time>20:00</time><div><div class="row"><span class="ic">🎂</span><span class="tag sweet">디저트</span></div><div class="what">호텔 복귀 · 케이크 + 와인</div><div class="how">언덕 위 야경 보면서 초 켜기.</div></div></li></ol>
+      </div>
+      <div class="day">
+        <div class="dayhead"><span class="n">2</span><h3>바다 보며 노천온천</h3><span class="d">12.26 토</span></div>
+        <ol class="tl"><li><time>08:00</time><div><div class="row"><span class="ic">🚶</span><span class="tag nature">아침</span></div><div class="what">아침 산책 + 스트레칭</div><div class="how">호텔 산책로 한 바퀴, 벤치에서 스트레칭.</div></div></li><li><time>09:00</time><div><div class="row"><span class="ic">🍳</span><span class="tag meal">조식</span></div><div class="what">호텔 조식 뷔페</div><div class="how">07:30~10:30.</div></div></li><li><time>10:30</time><div><div class="row"><span class="ic">🚗</span><span class="tag move">이동</span></div><div class="what">체크아웃 → 석모도</div><div class="how">석모대교 건너 약 30분.</div></div></li><li><time>11:15</time><div><div class="row"><span class="ic">♨️</span><span class="tag spa">온천</span></div><div class="what">석모도 미네랄온천</div><div class="how">460m 암반수 노천탕 15개, 온천복 착용. 바다 보면서 1시간 반.</div></div></li><li><time>13:30</time><div><div class="row"><span class="ic">🍽️</span><span class="tag meal">점심</span></div><div class="what">석모도 점심</div><div class="how">밴댕이 정식이나 젓국갈비. 온천 근처 식당가.</div></div></li><li><time>15:00</time><div><div class="row"><span class="ic">🌊</span><span class="tag nature">산책</span></div><div class="what">민머루해변 or 보문사 산책</div><div class="how">짧게 30분. 사람 적어.</div></div></li><li><time>16:00</time><div><div class="row"><span class="ic">☕</span><span class="tag meal">카페</span></div><div class="what">강화 카페에서 마무리</div><div class="how">돌아오는 길 강화읍 카페. 소창 손수건 하나 사기.</div></div></li><li><time>17:30</time><div><div class="row"><span class="ic">🚗</span><span class="tag move">이동</span></div><div class="what">서울 도착</div><div class="how">저녁 전에 집.</div></div></li></ol>
+      </div>
+      <div class="note green"><b>온천 메모</b> · 석모도 미네랄온천은 화요일 휴무, 겨울 운영시간은 방문 전 확인. 온천복은 현장 대여.</div>
+    </div>
+    <div class="sheet">
+      <span class="kicker">세부 링크</span>
+      <h2>눌러서 확인하기</h2>
+      <ul class="links"><li><a class="link" href="https://nol.yanolja.com/stay/domestic/3000946" target="_blank" rel="noopener"><span><span class="t">호텔 에버리치</span><span class="s">강화읍 화성길50번길 43 · 예약</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%EC%A1%B0%EC%96%91%EB%B0%A9%EC%A7%81" target="_blank" rel="noopener"><span><span class="t">조양방직</span><span class="s">강화읍 향나무길5번길 12 · 평일 11:00~20:00</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%EA%B0%95%ED%99%94%ED%92%8D%EB%AC%BC%EC%8B%9C%EC%9E%A5" target="_blank" rel="noopener"><span><span class="t">강화풍물시장</span><span class="s">젓국갈비 · 밴댕이 · 순무</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%EA%B0%95%ED%99%94%20%EC%86%8C%EC%B0%BD%EC%B2%B4%ED%97%98%EA%B4%80" target="_blank" rel="noopener"><span><span class="t">소창체험관</span><span class="s">1938년 한옥 염색공장 터 · 무료</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%EB%8C%80%ED%95%9C%EC%84%B1%EA%B3%B5%ED%9A%8C%20%EA%B0%95%ED%99%94%EC%84%B1%EB%8B%B9" target="_blank" rel="noopener"><span><span class="t">대한성공회 강화성당</span><span class="s">한옥 성당 · 용흥궁 옆</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%EB%8F%99%EB%A7%89%ED%95%B4%EB%B3%80" target="_blank" rel="noopener"><span><span class="t">동막해변</span><span class="s">겨울 일몰 · 조개구이</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%EC%84%9D%EB%AA%A8%EB%8F%84%EB%AF%B8%EB%84%A4%EB%9E%84%EC%98%A8%EC%B2%9C" target="_blank" rel="noopener"><span><span class="t">석모도 미네랄온천</span><span class="s">바다뷰 노천탕 · 화요일 휴무</span></span><span class="arr">→</span></a></li></ul>
+    </div>
+    <div class="sheet red">
+      <span class="kicker">챙길 것</span>
+      <h2>가방에 넣자</h2>
+      <ul class="check">
+        <li>케이크 + 초 + 라이터</li><li>와인 + 오프너 + 잔</li><li>따뜻한 양말, 비니</li><li>요가 가능한 편한 옷</li><li>걷기 좋은 운동화</li><li>입욕제</li><li>카메라</li><li>간식 담을 가방</li>
+      </ul>
+    </div>
+    <button class="back bottom" type="button" data-back>← 다른 곳도 보기</button>
+    <p class="foot">메리 크리스마스 🎄<span class="k">나랑 놀면 재밌을거야🤍</span></p>
+  </section>
+  <section class="view detail" id="detail-yangpyeong" hidden aria-label="양평 세부 일정">
+    <button class="back" type="button" data-back>← 다른 곳도 보기</button>
+    <div class="sheet red">
+      <span class="kicker">🧘 양평</span>
+      <h2>강, 요가, 장날</h2>
+      <ul class="top-meta">
+        <li><span class="ic">📅</span><span><b>12월 25일(금) ~ 26일(토)</b> 1박 2일</span></li>
+        <li><span class="ic">📍</span><span><b>양평</b> · 경기 양평 · 차로 약 1시간</span></li>
+      </ul>
+      <p class="letter">두물머리 산책, 집처럼 꾸민 미술관, 아침 요가 클래스. 둘째 날은 딱 장날인 양수리 시장.</p>
+    </div>
+    <div class="sheet">
+      <span class="kicker">우리가 묵을 곳</span>
+      <h2>블룸비스타 호텔</h2>
+      <p class="who">남한강변 · 두물머리 10분</p>
+      <p class="lead">호텔 G·X 스튜디오에서 요가·필라테스 클래스를 운영해서 아침 요가가 진짜로 가능한 곳. 미네랄 사우나는 남녀 분리라 수영복 필요 없고, 15층 스카이라운지에서 강 일몰.</p>
+      <p>더 프라이빗하게 가고 싶으면 산속 독채 <b>생각속의 집</b>. 숲이 보이는 히노끼탕(15~21시)과 벽난로. 호텔 프로그램은 없지만 가장 조용한 선택.</p>
+      <a class="go" href="https://bloomvista.co.kr/" target="_blank" rel="noopener">숙소 보기 →</a>
+    </div>
+    <div class="sheet red">
+      <span class="kicker">일정표</span>
+      <h2>이틀 동안 뭐 하지?</h2>
+      <div class="day">
+        <div class="dayhead"><span class="n">1</span><h3>두물머리, 미술관, 강 일몰</h3><span class="d">12.25 금</span></div>
+        <ol class="tl"><li><time>10:30</time><div><div class="row"><span class="ic">🚗</span><span class="tag move">이동</span></div><div class="what">서울 출발</div><div class="how">올림픽대로 → 양수리, 약 1시간.</div></div></li><li><time>11:30</time><div><div class="row"><span class="ic">🌳</span><span class="tag nature">산책</span></div><div class="what">두물머리 산책</div><div class="how">400년 느티나무와 황포돛배. 겨울 평일 오전은 한산해. 1시간.</div></div></li><li><time>12:40</time><div><div class="row"><span class="ic">🍲</span><span class="tag meal">점심</span></div><div class="what">양수리에서 점심</div><div class="how">양평해장국 또는 두물머리 연핫도그로 가볍게.</div></div></li><li><time>14:00</time><div><div class="row"><span class="ic">🖼️</span><span class="tag shop">미술관</span></div><div class="what">구하우스 미술관</div><div class="how">서종의 집 컨셉 현대미술관. 워홀, 허스트, 백남준을 소파에 앉아서 봐.</div></div></li><li><time>15:30</time><div><div class="row"><span class="ic">🏨</span><span class="tag stay">체크인</span></div><div class="what">블룸비스타 체크인</div><div class="how">케이크는 냉장고에. 요가 클래스 시간표 프런트에서 확인.</div></div></li><li><time>16:00</time><div><div class="row"><span class="ic">🚶</span><span class="tag nature">산책</span></div><div class="what">남한강변 산책</div><div class="how">호텔 앞 강변길 1시간.</div></div></li><li><time>17:26</time><div><div class="row"><span class="ic">🌅</span><span class="tag nature">일몰</span></div><div class="what sun">15층 스카이라운지 일몰</div><div class="how">강 위로 지는 해.</div></div></li><li><time>18:00</time><div><div class="row"><span class="ic">🥩</span><span class="tag meal">저녁</span></div><div class="what">양평 한우 or 민물매운탕</div><div class="how">강 동네라 바다 대신 한우. 호텔 근처 한우집.</div></div></li><li><time>20:00</time><div><div class="row"><span class="ic">♨️</span><span class="tag spa">사우나</span></div><div class="what">미네랄 사우나</div><div class="how">남녀 분리, 수영복 불필요. 06:30~21:00.</div></div></li><li><time>21:00</time><div><div class="row"><span class="ic">🎂</span><span class="tag sweet">디저트</span></div><div class="what">룸에서 케이크 + 와인</div><div class="how">강 보이는 창가에서 초 켜기.</div></div></li></ol>
+      </div>
+      <div class="day">
+        <div class="dayhead"><span class="n">2</span><h3>요가, 그리고 장날</h3><span class="d">12.26 토</span></div>
+        <ol class="tl"><li><time>07:00</time><div><div class="row"><span class="ic">🧘</span><span class="tag nature">요가</span></div><div class="what">아침 요가 클래스</div><div class="how">G·X 스튜디오. 시간표는 체크인 때 확인, 없으면 강변 아침 산책.</div></div></li><li><time>08:30</time><div><div class="row"><span class="ic">🍳</span><span class="tag meal">조식</span></div><div class="what">호텔 조식</div><div class="how">느긋하게.</div></div></li><li><time>10:30</time><div><div class="row"><span class="ic">🚗</span><span class="tag move">이동</span></div><div class="what">체크아웃 → 양수리</div><div class="how">차로 10분.</div></div></li><li><time>11:00</time><div><div class="row"><span class="ic">🧺</span><span class="tag shop">시장</span></div><div class="what">양수리 전통시장 장날</div><div class="how">1·6일 장. 12/26이 딱 장날. 뻥튀기, 나물, 호떡.</div></div></li><li><time>12:30</time><div><div class="row"><span class="ic">🍽️</span><span class="tag meal">점심</span></div><div class="what">시장에서 점심</div><div class="how">장터국수나 칼국수.</div></div></li><li><time>14:00</time><div><div class="row"><span class="ic">☕</span><span class="tag meal">카페</span></div><div class="what">테라로사 서종점</div><div class="how">북한강변 넓은 카페. 커피 한 잔, 책 한 권.</div></div></li><li><time>16:00</time><div><div class="row"><span class="ic">🚗</span><span class="tag move">이동</span></div><div class="what">서울 도착</div><div class="how">막히기 전에 출발.</div></div></li></ol>
+      </div>
+      <div class="note green"><b>요가 메모</b> · 클래스 시간표는 호텔(031-770-8911)에 전화로 미리 확인하자. 양수리 장날은 1·6일이라 12/26 토요일에 열려.</div>
+    </div>
+    <div class="sheet">
+      <span class="kicker">세부 링크</span>
+      <h2>눌러서 확인하기</h2>
+      <ul class="links"><li><a class="link" href="https://bloomvista.co.kr/" target="_blank" rel="noopener"><span><span class="t">블룸비스타 호텔</span><span class="s">공식 홈페이지 · 031-770-8911</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%EB%91%90%EB%AC%BC%EB%A8%B8%EB%A6%AC" target="_blank" rel="noopener"><span><span class="t">두물머리</span><span class="s">느티나무 · 황포돛배</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%EA%B5%AC%ED%95%98%EC%9A%B0%EC%8A%A4%20%EB%AF%B8%EC%88%A0%EA%B4%80" target="_blank" rel="noopener"><span><span class="t">구하우스 미술관</span><span class="s">서종 · 집 컨셉 현대미술관</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%EC%96%91%EC%88%98%EB%A6%AC%20%EC%A0%84%ED%86%B5%EC%8B%9C%EC%9E%A5" target="_blank" rel="noopener"><span><span class="t">양수리 전통시장</span><span class="s">1·6일 장날</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%ED%85%8C%EB%9D%BC%EB%A1%9C%EC%82%AC%20%EC%84%9C%EC%A2%85%EC%A0%90" target="_blank" rel="noopener"><span><span class="t">테라로사 서종점</span><span class="s">북한강변 카페</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://mindhome.co.kr/" target="_blank" rel="noopener"><span><span class="t">생각속의 집 (대안 숙소)</span><span class="s">독채 · 히노끼탕 · 벽난로</span></span><span class="arr">→</span></a></li></ul>
+    </div>
+    <div class="sheet red">
+      <span class="kicker">챙길 것</span>
+      <h2>가방에 넣자</h2>
+      <ul class="check">
+        <li>케이크 + 초 + 라이터</li><li>와인 + 오프너 + 잔</li><li>따뜻한 양말, 비니</li><li>요가 가능한 편한 옷</li><li>걷기 좋은 운동화</li><li>입욕제</li><li>카메라</li><li>간식 담을 가방</li>
+      </ul>
+    </div>
+    <button class="back bottom" type="button" data-back>← 다른 곳도 보기</button>
+    <p class="foot">메리 크리스마스 🎄<span class="k">나랑 놀면 재밌을거야🤍</span></p>
+  </section>
+  <section class="view detail" id="detail-paju" hidden aria-label="파주 세부 일정">
+    <button class="back" type="button" data-back>← 다른 곳도 보기</button>
+    <div class="sheet red">
+      <span class="kicker">📚 파주</span>
+      <h2>책 숲에서 하룻밤</h2>
+      <ul class="top-meta">
+        <li><span class="ic">📅</span><span><b>12월 25일(금) ~ 26일(토)</b> 1박 2일</span></li>
+        <li><span class="ic">📍</span><span><b>파주</b> · 경기 파주 · 차로 약 50분</span></li>
+      </ul>
+      <p class="letter">헤이리 소품샵 골목, 지혜의 숲 서가, 호수 출렁다리. 가장 가깝고 가장 조용한 선택.</p>
+    </div>
+    <div class="sheet">
+      <span class="kicker">우리가 묵을 곳</span>
+      <h2>지지향</h2>
+      <p class="who">출판도시 지혜의 숲 안 · 북스테이</p>
+      <p class="lead">책으로 가득한 건물 안에서 자는 게스트하우스. 객실에 TV가 없고 창밖은 출판도시 숲. 조식은 체크인 때 사전 신청.</p>
+      <p>수영장이나 사우나는 없어. 대신 밤에 서가에서 책 고르고 룸에서 케이크 먹는 가장 고요한 밤.</p>
+      <a class="go" href="https://map.naver.com/p/search/%EC%A7%80%EC%A7%80%ED%96%A5%20%ED%8C%8C%EC%A3%BC" target="_blank" rel="noopener">숙소 보기 →</a>
+    </div>
+    <div class="sheet red">
+      <span class="kicker">일정표</span>
+      <h2>이틀 동안 뭐 하지?</h2>
+      <div class="day">
+        <div class="dayhead"><span class="n">1</span><h3>소품샵, 서가, 두부</h3><span class="d">12.25 금</span></div>
+        <ol class="tl"><li><time>10:30</time><div><div class="row"><span class="ic">🚗</span><span class="tag move">이동</span></div><div class="what">서울 출발</div><div class="how">자유로, 약 50분.</div></div></li><li><time>11:30</time><div><div class="row"><span class="ic">🛍️</span><span class="tag shop">소품샵</span></div><div class="what">헤이리 예술마을</div><div class="how">갤러리, 소품샵, 책방 40여 곳. 평일은 한산해서 골목 걷기 좋아.</div></div></li><li><time>13:00</time><div><div class="row"><span class="ic">🍽️</span><span class="tag meal">점심</span></div><div class="what">헤이리에서 점심</div><div class="how">마을 안 브런치 카페나 파스타.</div></div></li><li><time>15:00</time><div><div class="row"><span class="ic">🏨</span><span class="tag stay">체크인</span></div><div class="what">지지향 체크인</div><div class="how">조식 신청하기. 케이크는 냉장고에.</div></div></li><li><time>15:30</time><div><div class="row"><span class="ic">📚</span><span class="tag shop">서가</span></div><div class="what">지혜의 숲에서 책 고르기</div><div class="how">높은 서가 사이에서 오늘 밤 읽을 책 한 권씩.</div></div></li><li><time>16:30</time><div><div class="row"><span class="ic">🚶</span><span class="tag nature">산책</span></div><div class="what">출판도시 샛강 산책</div><div class="how">갈대 샛강길 1시간. 건축물 구경하면서.</div></div></li><li><time>17:26</time><div><div class="row"><span class="ic">🌅</span><span class="tag nature">일몰</span></div><div class="what sun">출판도시 노을</div><div class="how">심학산 쪽으로 지는 해.</div></div></li><li><time>18:00</time><div><div class="row"><span class="ic">🍲</span><span class="tag meal">저녁</span></div><div class="what">장단콩 두부 요리</div><div class="how">파주 명물. 두부전골과 콩비지.</div></div></li><li><time>20:00</time><div><div class="row"><span class="ic">🎂</span><span class="tag sweet">디저트</span></div><div class="what">룸에서 케이크 + 와인 + 책</div><div class="how">TV 없는 방에서 초 켜고.</div></div></li></ol>
+      </div>
+      <div class="day">
+        <div class="dayhead"><span class="n">2</span><h3>호수, 출렁다리, 바람의 언덕</h3><span class="d">12.26 토</span></div>
+        <ol class="tl"><li><time>08:00</time><div><div class="row"><span class="ic">🚶</span><span class="tag nature">아침</span></div><div class="what">출판도시 아침 산책 + 스트레칭</div><div class="how">조용한 거리. 30분.</div></div></li><li><time>09:00</time><div><div class="row"><span class="ic">🍳</span><span class="tag meal">조식</span></div><div class="what">지지향 조식</div><div class="how">사전 신청자만.</div></div></li><li><time>11:00</time><div><div class="row"><span class="ic">🚗</span><span class="tag move">이동</span></div><div class="what">체크아웃 → 마장호수</div><div class="how">차로 약 30분.</div></div></li><li><time>11:40</time><div><div class="row"><span class="ic">🌉</span><span class="tag nature">산책</span></div><div class="what">마장호수 출렁다리 · 둘레길</div><div class="how">220m 현수교 건너서 호수 둘레길 1시간.</div></div></li><li><time>13:30</time><div><div class="row"><span class="ic">🍽️</span><span class="tag meal">점심</span></div><div class="what">마장호수 근처 점심</div><div class="how">호수 앞 식당가.</div></div></li><li><time>15:00</time><div><div class="row"><span class="ic">🌾</span><span class="tag nature">산책</span></div><div class="what">임진각 평화누리 바람의 언덕</div><div class="how">넓어서 사람이 흩어져. 바람개비 언덕 40분.</div></div></li><li><time>16:30</time><div><div class="row"><span class="ic">☕</span><span class="tag meal">카페</span></div><div class="what">카페에서 마무리</div><div class="how">자유로 타기 전 한 잔.</div></div></li><li><time>17:30</time><div><div class="row"><span class="ic">🚗</span><span class="tag move">이동</span></div><div class="what">서울 도착</div><div class="how">가장 빨리 집에 오는 코스.</div></div></li></ol>
+      </div>
+      <div class="note green"><b>메모</b> · 지지향은 조식을 체크인 때 신청해야 해. 헤이리 가게들은 월요일 휴무가 많지만 금요일은 괜찮아.</div>
+    </div>
+    <div class="sheet">
+      <span class="kicker">세부 링크</span>
+      <h2>눌러서 확인하기</h2>
+      <ul class="links"><li><a class="link" href="https://map.naver.com/p/search/%EC%A7%80%EC%A7%80%ED%96%A5%20%ED%8C%8C%EC%A3%BC" target="_blank" rel="noopener"><span><span class="t">지지향</span><span class="s">파주 회동길 145 · 북스테이</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%ED%97%A4%EC%9D%B4%EB%A6%AC%20%EC%98%88%EC%88%A0%EB%A7%88%EC%9D%84" target="_blank" rel="noopener"><span><span class="t">헤이리 예술마을</span><span class="s">소품샵 · 갤러리 · 책방</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%EC%A7%80%ED%98%9C%EC%9D%98%20%EC%88%B2%20%ED%8C%8C%EC%A3%BC" target="_blank" rel="noopener"><span><span class="t">지혜의 숲</span><span class="s">출판도시 서가 · 24시간</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%EB%A7%88%EC%9E%A5%ED%98%B8%EC%88%98%20%EC%B6%9C%EB%A0%81%EB%8B%A4%EB%A6%AC" target="_blank" rel="noopener"><span><span class="t">마장호수 출렁다리</span><span class="s">220m 현수교 · 둘레길</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%EC%9E%84%EC%A7%84%EA%B0%81%20%ED%8F%89%ED%99%94%EB%88%84%EB%A6%AC" target="_blank" rel="noopener"><span><span class="t">임진각 평화누리</span><span class="s">바람의 언덕</span></span><span class="arr">→</span></a></li></ul>
+    </div>
+    <div class="sheet red">
+      <span class="kicker">챙길 것</span>
+      <h2>가방에 넣자</h2>
+      <ul class="check">
+        <li>케이크 + 초 + 라이터</li><li>와인 + 오프너 + 잔</li><li>따뜻한 양말, 비니</li><li>요가 가능한 편한 옷</li><li>걷기 좋은 운동화</li><li>입욕제</li><li>카메라</li><li>간식 담을 가방</li>
+      </ul>
+    </div>
+    <button class="back bottom" type="button" data-back>← 다른 곳도 보기</button>
+    <p class="foot">메리 크리스마스 🎄<span class="k">나랑 놀면 재밌을거야🤍</span></p>
+  </section>
+  <section class="view detail" id="detail-chuncheon" hidden aria-label="춘천 세부 일정">
+    <button class="back" type="button" data-back>← 다른 곳도 보기</button>
+    <div class="sheet red">
+      <span class="kicker">🏞️ 춘천</span>
+      <h2>호수 옆 작은 마을</h2>
+      <ul class="top-meta">
+        <li><span class="ic">📅</span><span><b>12월 25일(금) ~ 26일(토)</b> 1박 2일</span></li>
+        <li><span class="ic">📍</span><span><b>춘천</b> · 강원 춘천 · 차로 약 1시간 20분</span></li>
+      </ul>
+      <p class="letter">의암호 둘레길, 전망대 카페, 옛 극장 골목의 소품샵과 시장. 닭갈비는 덤.</p>
+    </div>
+    <div class="sheet">
+      <span class="kicker">우리가 묵을 곳</span>
+      <h2>KT&G 상상마당 춘천 스테이</h2>
+      <p class="who">의암호 바로 앞 · 아트센터 옆</p>
+      <p class="lead">시내인데 숲속처럼 조용하다는 평. 바로 옆이 의암호 둘레길과 호수뷰 카페, 조식 포함. 욕조 있는 객실로 고르자.</p>
+      <p>사우나·수영장은 없고 호수가 전부야. 대신 아침에 호수 안개 보면서 요가 매트 펴기 딱 좋은 곳.</p>
+      <a class="go" href="https://nol.yanolja.com/stay/domestic/3001265" target="_blank" rel="noopener">숙소 보기 →</a>
+    </div>
+    <div class="sheet red">
+      <span class="kicker">일정표</span>
+      <h2>이틀 동안 뭐 하지?</h2>
+      <div class="day">
+        <div class="dayhead"><span class="n">1</span><h3>소양강, 전망대, 호수 일몰</h3><span class="d">12.25 금</span></div>
+        <ol class="tl"><li><time>10:00</time><div><div class="row"><span class="ic">🚗</span><span class="tag move">이동</span></div><div class="what">서울 출발</div><div class="how">서울양양고속도로, 약 1시간 20분.</div></div></li><li><time>11:40</time><div><div class="row"><span class="ic">🌉</span><span class="tag nature">산책</span></div><div class="what">소양강 스카이워크</div><div class="how">강 위 유리 바닥. 20분.</div></div></li><li><time>12:30</time><div><div class="row"><span class="ic">🍗</span><span class="tag meal">점심</span></div><div class="what">춘천 닭갈비</div><div class="how">명동 닭갈비 골목 또는 온의동. 막국수 사리 추가.</div></div></li><li><time>14:00</time><div><div class="row"><span class="ic">☕</span><span class="tag meal">카페</span></div><div class="what">구봉산 전망대 카페</div><div class="how">춘천 시내와 호수가 한눈에. 통창 자리.</div></div></li><li><time>15:30</time><div><div class="row"><span class="ic">🏨</span><span class="tag stay">체크인</span></div><div class="what">상상마당 춘천 스테이 체크인</div><div class="how">케이크는 냉장고에.</div></div></li><li><time>16:00</time><div><div class="row"><span class="ic">🚶</span><span class="tag nature">산책</span></div><div class="what">의암호 둘레길</div><div class="how">호텔 앞에서 바로. 1시간.</div></div></li><li><time>17:26</time><div><div class="row"><span class="ic">🌅</span><span class="tag nature">일몰</span></div><div class="what sun">의암호 일몰</div><div class="how">호수 위로 지는 해.</div></div></li><li><time>18:00</time><div><div class="row"><span class="ic">🍜</span><span class="tag meal">저녁</span></div><div class="what">호수 근처 저녁</div><div class="how">춘천 막국수 or 삼천동 식당. 바다 대신 호수 마을 저녁.</div></div></li><li><time>20:00</time><div><div class="row"><span class="ic">🛁</span><span class="tag spa">스파</span></div><div class="what">객실 욕조</div><div class="how">입욕제 풀고 느긋하게.</div></div></li><li><time>21:00</time><div><div class="row"><span class="ic">🎂</span><span class="tag sweet">디저트</span></div><div class="what">룸에서 케이크 + 와인</div><div class="how">호수 보면서 초 켜기.</div></div></li></ol>
+      </div>
+      <div class="day">
+        <div class="dayhead"><span class="n">2</span><h3>소품샵 골목과 시장</h3><span class="d">12.26 토</span></div>
+        <ol class="tl"><li><time>08:00</time><div><div class="row"><span class="ic">🧘</span><span class="tag nature">요가</span></div><div class="what">의암호 아침 산책 + 요가 매트</div><div class="how">호수 안개 속 스트레칭 30분.</div></div></li><li><time>09:00</time><div><div class="row"><span class="ic">🍳</span><span class="tag meal">조식</span></div><div class="what">호텔 조식</div><div class="how">포함.</div></div></li><li><time>11:00</time><div><div class="row"><span class="ic">🚗</span><span class="tag move">이동</span></div><div class="what">체크아웃 → 육림고개</div><div class="how">차로 10분.</div></div></li><li><time>11:30</time><div><div class="row"><span class="ic">🛍️</span><span class="tag shop">소품샵</span></div><div class="what">육림고개 · 요싸롱 레코드</div><div class="how">옛 육림극장 골목 500m. 소품샵, 공방, 레코드.</div></div></li><li><time>12:30</time><div><div class="row"><span class="ic">🍲</span><span class="tag meal">점심</span></div><div class="what">춘천 낭만시장(중앙시장)</div><div class="how">육림고개 바로 아래. 시장 국수와 닭강정.</div></div></li><li><time>14:30</time><div><div class="row"><span class="ic">☕</span><span class="tag meal">카페</span></div><div class="what">공지천 이디오피아 카페</div><div class="how">한국전 참전 기념 커피집. 공지천 산책 겸.</div></div></li><li><time>16:00</time><div><div class="row"><span class="ic">🚗</span><span class="tag move">이동</span></div><div class="what">서울 도착</div><div class="how">막히기 전에.</div></div></li></ol>
+      </div>
+      <div class="note green"><b>메모</b> · 상상마당 스테이는 객실 타입이 다양해서 욕조 있는 방으로 예약하자.</div>
+    </div>
+    <div class="sheet">
+      <span class="kicker">세부 링크</span>
+      <h2>눌러서 확인하기</h2>
+      <ul class="links"><li><a class="link" href="https://nol.yanolja.com/stay/domestic/3001265" target="_blank" rel="noopener"><span><span class="t">KT&G 상상마당 춘천 스테이</span><span class="s">의암호 앞 · 예약</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%EC%86%8C%EC%96%91%EA%B0%95%20%EC%8A%A4%EC%B9%B4%EC%9D%B4%EC%9B%8C%ED%81%AC" target="_blank" rel="noopener"><span><span class="t">소양강 스카이워크</span><span class="s">유리 바닥 전망대</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%EA%B5%AC%EB%B4%89%EC%82%B0%20%EC%A0%84%EB%A7%9D%EB%8C%80" target="_blank" rel="noopener"><span><span class="t">구봉산 전망대 카페거리</span><span class="s">시내 · 호수 전망</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%EC%9D%98%EC%95%94%ED%98%B8%20%EB%91%98%EB%A0%88%EA%B8%B8" target="_blank" rel="noopener"><span><span class="t">의암호 둘레길</span><span class="s">호수 산책</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%EC%B6%98%EC%B2%9C%20%EC%9C%A1%EB%A6%BC%EA%B3%A0%EA%B0%9C" target="_blank" rel="noopener"><span><span class="t">육림고개</span><span class="s">소품샵 · 공방 · 레코드</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%EC%B6%98%EC%B2%9C%20%EB%82%AD%EB%A7%8C%EC%8B%9C%EC%9E%A5" target="_blank" rel="noopener"><span><span class="t">춘천 낭만시장</span><span class="s">중앙시장 · 먹거리</span></span><span class="arr">→</span></a></li></ul>
+    </div>
+    <div class="sheet red">
+      <span class="kicker">챙길 것</span>
+      <h2>가방에 넣자</h2>
+      <ul class="check">
+        <li>케이크 + 초 + 라이터</li><li>와인 + 오프너 + 잔</li><li>따뜻한 양말, 비니</li><li>요가 가능한 편한 옷</li><li>걷기 좋은 운동화</li><li>입욕제</li><li>카메라</li><li>간식 담을 가방</li>
+      </ul>
+    </div>
+    <button class="back bottom" type="button" data-back>← 다른 곳도 보기</button>
+    <p class="foot">메리 크리스마스 🎄<span class="k">나랑 놀면 재밌을거야🤍</span></p>
+  </section>
+  </section>
+</div>
+
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---- quiz ----
+  var QUIZ = [
+    { q: '우리가 처음 만난 날짜는?', a: ['2026년 10월 18일', '2026년 10월 11일', '2026년 9월 18일'], ok: 0 },
+    { q: '우리가 다음주에 할 데이트는?', a: ['헝거게임 영화보기', '오페라의 유령 뮤지컬 보러가기', '엉덩이로 이름쓰기'], ok: 0 },
+    { q: '은지가 좋아하는 불닭 레시피는?', a: ['불닭냉면', '불닭오믈렛', '까르보치즈불닭'], ok: 0 }
+  ];
+  var step = 0, busy = false;
+  var gate = $('gate'), quiz = $('quiz'), spy = $('spy'), locked = $('locked'), invite = $('invite'), plan = $('plan');
+
+  function shuffle(arr){ var a = arr.slice(); for (var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+
+  function renderQ(){
+    var item = QUIZ[step];
+    $('qText').textContent = 'Q' + (step+1) + '. ' + item.q;
+    var dots = $('steps').children;
+    for (var i=0;i<dots.length;i++){ dots[i].className = i < step ? 'on' : (i === step ? 'now' : ''); }
+    var order = shuffle([0,1,2]);
+    var ul = $('opts'); ul.innerHTML = '';
+    var labels = ['가','나','다'];
+    order.forEach(function(idx, n){
+      var li = document.createElement('li');
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'opt';
+      b.innerHTML = '<span class="k">' + labels[n] + '</span><span></span>';
+      b.lastChild.textContent = item.a[idx];
+      b.addEventListener('click', function(){ answer(idx === item.ok, b); });
+      li.appendChild(b); ul.appendChild(li);
+    });
+    $('okMsg').textContent = '';
+  }
+
+  function answer(correct, btn){
+    if (busy) return; busy = true;
+    if (!correct) { return bust(); }
+    btn.classList.add('ok');
+    var msgs = ['정답! 역시 세훈이네.', '짱짱맨 !! 역시 믿고 있었다구', '통과! 초대장 열어줄게.'];
+    $('okMsg').textContent = msgs[step];
+    setTimeout(function(){
+      step += 1; busy = false;
+      if (step >= QUIZ.length) { pass(); } else { renderQ(); }
+    }, 700);
+  }
+
+  function pass(){
+    gate.hidden = true;
+    invite.hidden = false;
+    window.scrollTo(0,0);
+  }
+
+  function bust(){
+    quiz.hidden = true; spy.hidden = false;
+    document.body.classList.add('danger');
+    if (reduce) { return setTimeout(lockOut, 600); }
+    spy.classList.add('spin');
+    setTimeout(function(){
+      var f = $('flash'); f.classList.add('on');
+      $('bang').classList.add('show');
+      if (navigator.vibrate) { try { navigator.vibrate([80,40,120]); } catch(e){} }
+      setTimeout(lockOut, 1400);
+    }, 1700);
+  }
+
+  function lockOut(){
+    spy.hidden = true; locked.hidden = false;
+    document.body.classList.add('danger');
+  }
+
+  renderQ();
+
+  // ---- RSVP ----
+  var joinBtn = $('joinBtn'), declineBtn = $('declineBtn'), againBtn = $('againBtn'), nag = $('nag'), accepted = $('accepted');
+  var count = 0;
+  var lines = [
+    '음… 한 번 더 생각해봐.', '진짜? 따끈한 욕조인데?', '눈사람도 같이 가고 싶대.',
+    '소금빵은 오후면 품절이야. 우리가 가야 해.', '차를 배에 싣는다니까. 배에!', '닭강정… 시장 닭강정…',
+    '크리스마스에 조용한 데 가는 사람 생각보다 없어. 우리만 가자.', '그 버튼, 사실 아무 일도 안 일어나.',
+    '계속 눌러봐. 나는 기다릴 수 있어.', '해 지는 거 같이 보고 싶어.', '이쯤이면 그냥 함께하기 누르는 게 빠를걸.',
+    '아직도 생각 중이야? 조식은 2인분이야.', '…', '위에 빨간 버튼 보이지? 그거야. 🩵'
+  ];
+  function setNag(text){
+    nag.innerHTML = '';
+    var t = document.createElement('span'); t.textContent = text; nag.appendChild(t);
+    if (count > 0) { var c = document.createElement('span'); c.className = 'count'; c.textContent = '다시 생각한 횟수 ' + count; nag.appendChild(c); }
+  }
+  joinBtn.addEventListener('click', function(){
+    joinBtn.hidden = true; declineBtn.hidden = true; againBtn.hidden = true; nag.hidden = true;
+    accepted.style.display = 'block';
+    plan.hidden = false;
+    setTimeout(function(){ plan.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }); }, 80);
+  });
+  declineBtn.addEventListener('click', function(){
+    declineBtn.hidden = true; againBtn.hidden = false; setNag(lines[0]); againBtn.focus();
+  });
+  againBtn.addEventListener('click', function(){
+    count += 1;
+    setNag(lines[Math.min(count, lines.length - 1)]);
+    againBtn.classList.remove('shake'); void againBtn.offsetWidth; againBtn.classList.add('shake');
+    var labels = ['다시 생각하기','한 번 더 생각하기','또 생각하기','진지하게 생각하기','마지막으로 생각하기','다시 생각하기'];
+    againBtn.textContent = labels[Math.min(count, labels.length - 1)];
+    if (count >= 6) { joinBtn.style.transform = 'scale(' + (1 + Math.min(count - 5, 8) * 0.04) + ')'; }
+  });
+
+  // ---- destination picker ----
+  var pick = $('pick');
+  var views = document.querySelectorAll('#plan .detail');
+  function showDetail(id){
+    pick.hidden = true;
+    for (var i=0;i<views.length;i++){ views[i].hidden = (views[i].id !== 'detail-' + id); }
+    plan.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  }
+  function showPick(){
+    for (var i=0;i<views.length;i++){ views[i].hidden = true; }
+    pick.hidden = false;
+    plan.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  }
+  var dests = document.querySelectorAll('.dest');
+  for (var i=0;i<dests.length;i++){
+    dests[i].addEventListener('click', function(){ showDetail(this.getAttribute('data-dest')); });
+  }
+  var backs = document.querySelectorAll('[data-back]');
+  for (var j=0;j<backs.length;j++){ backs[j].addEventListener('click', showPick); }
+})();
+</script>
+</body>
+</html>
