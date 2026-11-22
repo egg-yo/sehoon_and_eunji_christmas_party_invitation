@@ -19,193 +19,164 @@
   html{-webkit-text-size-adjust:100%}
   body{
     margin:0;background:var(--green);color:var(--ink);
-    font-family:var(--hand);font-weight:400;font-size:19px;line-height:1.6;
+    font-family:var(--hand);font-weight:400;font-size:17px;line-height:1.6;
     background-image:
       radial-gradient(circle at 20% 10%, rgba(255,255,255,.18) 0 2px, transparent 3px),
       radial-gradient(circle at 70% 30%, rgba(255,255,255,.16) 0 2px, transparent 3px),
       radial-gradient(circle at 40% 70%, rgba(255,255,255,.14) 0 1.5px, transparent 2.5px),
       radial-gradient(circle at 85% 80%, rgba(255,255,255,.18) 0 2px, transparent 3px);
     background-size:220px 220px, 260px 260px, 180px 180px, 300px 300px;
-    min-height:100vh;overflow-x:hidden;transition:background-color .4s;
+    min-height:100vh;overflow-x:hidden;
   }
-  body.danger{background-color:#2A0E10}
-  .wrap{max-width:430px;margin:0 auto;padding:22px 14px 70px;position:relative;z-index:1}
-  @media (min-width:560px){.wrap{padding:44px 14px 90px}}
   [hidden]{display:none!important}
-
   .snow{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
   .snow i{position:absolute;top:-12px;display:block;width:8px;height:8px;border-radius:50%;background:#fff;opacity:.85;animation:fall linear infinite}
   @keyframes fall{to{transform:translateY(110vh) translateX(20px)}}
 
-  .card{
-    background:var(--snow);border:3px solid var(--ink);
-    border-radius:38px 30px 42px 28px / 30px 42px 28px 38px;
-    box-shadow:6px 7px 0 var(--red-deep);position:relative;padding:14px;
+  /* ---------- password gate ---------- */
+  .gatewrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;z-index:1}
+  .gate{
+    background:var(--snow);border:3px solid var(--ink);max-width:360px;width:100%;
+    border-radius:34px 26px 38px 24px / 26px 38px 24px 34px;box-shadow:6px 7px 0 var(--red-deep);
+    padding:30px 22px;text-align:center;
   }
-  .card::before{content:"";position:absolute;inset:8px;border:2px dashed var(--red);border-radius:32px 24px 36px 22px / 24px 36px 22px 32px;pointer-events:none}
-  .inner{padding:30px 18px 28px;text-align:center;position:relative}
-  .garland{display:flex;justify-content:center;gap:10px;margin-bottom:12px}
-  .garland b{width:14px;height:14px;border-radius:50%;display:block}
-  .garland b:nth-child(odd){background:var(--red)}
-  .garland b:nth-child(even){background:var(--green)}
-  .garland b:nth-child(3){background:var(--yellow)}
-  .snowman{display:block;width:200px;max-width:70%;height:auto;margin:4px auto 6px}
-  h1{font-family:var(--title);font-weight:400;font-size:46px;line-height:1.15;margin:8px 0 2px;color:var(--red);text-wrap:balance;text-shadow:2px 2px 0 var(--red-light);transform:rotate(-1.5deg)}
-  .hello{font-weight:700;font-size:34px;line-height:1.3;margin:4px 0 0;color:var(--green);transform:rotate(1deg);display:inline-block}
-
-  /* ---- gate / quiz ---- */
-  .gate h1{font-size:38px;transform:rotate(-1deg)}
-  .gate .sub{margin:0 0 14px;color:var(--soft);font-size:17px}
-  .steps{display:flex;justify-content:center;gap:8px;margin:0 0 18px}
-  .steps b{width:12px;height:12px;border-radius:50%;border:2px solid var(--ink);background:var(--snow);display:block}
-  .steps b.on{background:var(--green)}
-  .steps b.now{background:var(--red)}
-  .q{font-weight:700;font-size:25px;line-height:1.35;margin:0 0 16px;color:var(--ink);text-wrap:balance}
-  .opts{display:grid;gap:10px;margin:0;padding:0;list-style:none;text-align:left}
-  .opt{
-    appearance:none;cursor:pointer;width:100%;text-align:left;
-    font-family:var(--hand);font-size:19px;font-weight:400;color:var(--ink);
-    background:var(--paper);border:2px solid var(--ink);padding:10px 14px;
-    border-radius:18px 12px 16px 12px / 12px 16px 12px 18px;box-shadow:3px 3px 0 var(--green-light);
-    display:flex;gap:10px;align-items:center;transition:transform .12s, box-shadow .12s;
+  .gate h1{font-family:var(--title);font-size:32px;line-height:1.25;margin:4px 0 6px;color:var(--red);transform:rotate(-1deg);text-wrap:balance}
+  .gate .sub{margin:0 0 20px;color:var(--soft);font-size:16px}
+  .gate .garland{display:flex;justify-content:center;gap:9px;margin-bottom:14px}
+  .gate .garland b{width:12px;height:12px;border-radius:50%;display:block}
+  .gate .garland b:nth-child(odd){background:var(--red)}
+  .gate .garland b:nth-child(even){background:var(--green)}
+  .gate .garland b:nth-child(3){background:var(--yellow)}
+  #pwForm{display:flex;flex-direction:column;gap:12px}
+  #pwInput{
+    font-family:var(--hand);font-size:26px;letter-spacing:.3em;text-align:center;
+    border:2px solid var(--ink);border-radius:16px;padding:12px 10px;background:var(--paper);color:var(--ink);
+    width:100%;
   }
-  .opt .k{width:26px;height:26px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center;font-weight:700;font-size:15px;background:#fff;flex:none}
-  .opt:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--red-light)}
-  .opt:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--green-light)}
-  .opt:focus-visible{outline:3px solid var(--yellow);outline-offset:3px}
-  .opt.ok{background:var(--green-light);border-color:var(--green)}
-  .ok-msg{min-height:1.6em;margin:12px 0 0;color:var(--green-deep);font-weight:700;font-size:19px}
-
-  /* roulette */
-  .spy{text-align:center}
-  .spy h1{color:var(--red);font-size:40px}
-  .spy p{margin:6px 0 0;font-size:20px}
-  .gun{display:block;width:180px;height:180px;margin:14px auto 6px}
-  .cyl{transform-origin:100px 100px}
-  .spin .cyl{animation:spin 1.6s cubic-bezier(.2,.8,.2,1) forwards}
-  @keyframes spin{to{transform:rotate(1500deg)}}
-  .bang{font-family:var(--title);font-size:72px;line-height:1;color:var(--red);margin:4px 0 0;display:none;transform:rotate(-6deg)}
-  .bang.show{display:block;animation:pop .35s ease}
-  @keyframes pop{0%{transform:scale(.3) rotate(-20deg);opacity:0}60%{transform:scale(1.25) rotate(-4deg);opacity:1}100%{transform:scale(1) rotate(-6deg)}}
-  .flash{position:fixed;inset:0;background:#D9414A;opacity:0;pointer-events:none;z-index:5}
-  .flash.on{animation:flash .5s ease}
-  @keyframes flash{0%{opacity:0}30%{opacity:.9}100%{opacity:0}}
-  .locked{padding:20px 0 6px}
-  .locked .big{font-size:60px;line-height:1}
-
-  /* ---- RSVP ---- */
-  .rsvp{margin:26px 0 0}
-  .btn-join{
-    appearance:none;cursor:pointer;width:164px;height:164px;border-radius:50% 48% 52% 50% / 52% 50% 50% 48%;
-    border:3px solid var(--ink);background:radial-gradient(circle at 35% 30%, #F07078, var(--red) 55%, var(--red-deep));
-    color:#fff;font-family:var(--hand);font-weight:700;font-size:34px;line-height:1.1;box-shadow:5px 6px 0 var(--green-deep);
-    display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:transform .2s ease, box-shadow .2s ease;
+  #pwInput:focus{outline:3px solid var(--yellow);outline-offset:2px}
+  .pwBtn{
+    appearance:none;cursor:pointer;font-family:var(--hand);font-weight:700;font-size:19px;color:#fff;
+    background:var(--red);border:2px solid var(--ink);border-radius:16px 12px 14px 10px/12px 14px 10px 16px;
+    padding:10px 0;box-shadow:3px 3px 0 var(--green-deep);transition:transform .12s, box-shadow .12s;
   }
-  .btn-join small{font-size:16px;font-weight:400;opacity:.95}
-  .btn-join:hover{transform:translate(-2px,-2px) rotate(-2deg);box-shadow:7px 8px 0 var(--green-deep)}
-  .btn-join:active{transform:translate(2px,3px);box-shadow:2px 2px 0 var(--green-deep)}
-  .btn-join:focus-visible,.btn-small:focus-visible,.link:focus-visible,.dest:focus-visible,.back:focus-visible{outline:3px solid var(--yellow);outline-offset:4px}
-  .btn-small{appearance:none;background:none;border:0;cursor:pointer;font-family:var(--hand);font-size:16px;color:var(--soft);text-decoration:underline wavy;text-underline-offset:5px;text-decoration-color:var(--line);padding:6px 10px;margin-top:16px}
-  .btn-small:hover{color:var(--ink);text-decoration-color:var(--red)}
-  .btn-small.again{border:2px solid var(--ink);border-radius:20px 14px 18px 12px / 14px 18px 12px 20px;text-decoration:none;padding:6px 18px;color:var(--ink);background:var(--paper);font-size:17px;box-shadow:3px 3px 0 var(--green)}
-  .btn-small.again:hover{box-shadow:4px 4px 0 var(--red)}
-  .btn-small.again:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--green)}
-  .nag{margin:14px auto 0;min-height:1.6em;font-size:19px;color:var(--green-deep);max-width:26ch;text-wrap:balance;line-height:1.5}
-  .nag .count{color:var(--soft);font-size:14px;display:block;margin-top:2px}
-  .accepted{display:none;margin:0 auto;font-size:21px;color:var(--green-deep);line-height:1.5}
-  .accepted b{display:block;font-size:44px;line-height:1;margin-bottom:4px;color:var(--red);font-family:var(--title);font-weight:400}
-  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px) rotate(-2deg)}75%{transform:translateX(4px) rotate(2deg)}}
+  .pwBtn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--green-deep)}
+  .pwBtn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--green-deep)}
+  .pwErr{min-height:1.4em;color:var(--red);font-weight:700;font-size:15px;margin:0}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
   .shake{animation:shake .3s ease}
 
-  /* ---- plan ---- */
-  #plan{margin-top:22px}
-  .sheet{background:var(--snow);border:3px solid var(--ink);border-radius:26px 20px 30px 18px / 20px 30px 18px 26px;padding:24px 20px;margin-top:16px;box-shadow:5px 6px 0 var(--green-deep)}
+  /* ---------- app shell ---------- */
+  #app{display:none}
+  #app.show{display:block}
+  .wrap{max-width:430px;margin:0 auto;padding:0 12px 40px;position:relative;z-index:1}
+  .topnav{
+    position:sticky;top:0;z-index:3;display:flex;gap:6px;padding:10px 12px;
+    background:var(--green);background-image:inherit;max-width:430px;margin:0 auto;
+    border-bottom:3px dashed rgba(255,255,255,.35);
+  }
+  .navbtn{
+    flex:1;appearance:none;cursor:pointer;font-family:var(--hand);font-weight:700;font-size:14px;
+    color:#fff;background:rgba(255,255,255,.14);border:2px solid rgba(255,255,255,.4);
+    border-radius:14px 10px 12px 10px/10px 12px 10px 14px;padding:7px 2px;transition:background .15s, color .15s;
+  }
+  .navbtn.active{background:var(--snow);color:var(--red);border-color:var(--ink)}
+  .navbtn:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
+
+  .page{display:none;padding-top:14px}
+  .page.active{display:block}
+
+  .sheet{background:var(--snow);border:3px solid var(--ink);border-radius:26px 20px 30px 18px / 20px 30px 18px 26px;padding:22px 18px;margin-bottom:14px;box-shadow:5px 6px 0 var(--green-deep)}
   .sheet.red{box-shadow:5px 6px 0 var(--red-deep)}
-  .sheet .kicker{display:inline-block;font-size:14px;font-weight:700;letter-spacing:.06em;color:#fff;background:var(--green);padding:1px 12px;border-radius:14px 10px 12px 10px / 10px 12px 10px 14px;margin:0 0 8px;transform:rotate(-1.5deg)}
+  .sheet .kicker{display:inline-block;font-size:13px;font-weight:700;letter-spacing:.06em;color:#fff;background:var(--green);padding:1px 11px;border-radius:14px 10px 12px 10px / 10px 12px 10px 14px;margin:0 0 8px;transform:rotate(-1.5deg)}
   .sheet.red .kicker{background:var(--red)}
-  .sheet h2{font-family:var(--title);font-weight:400;font-size:30px;line-height:1.2;margin:0 0 6px;color:var(--ink);text-wrap:balance}
-  .sheet p{margin:8px 0;word-break:keep-all}
-  .sheet p.lead{font-size:19px;line-height:1.65}
-  .sheet p.who{margin:0 0 4px;font-size:15px;color:var(--soft)}
-  .sheet a.go{display:inline-block;margin-top:6px;font-weight:700;font-size:17px;color:var(--red);text-decoration:underline wavy;text-underline-offset:4px;text-decoration-color:var(--red-light)}
-  .sheet a.go:hover{text-decoration-color:var(--red)}
-  .top-meta{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:8px;font-size:18px}
-  .top-meta li{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start}
-  .top-meta .ic{font-size:20px;line-height:1.5}
+  .sheet h2{font-family:var(--title);font-weight:400;font-size:27px;line-height:1.2;margin:0 0 6px;color:var(--ink);text-wrap:balance}
+  .top-meta{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:8px;font-size:16.5px}
+  .top-meta li{display:grid;grid-template-columns:26px 1fr;gap:8px;align-items:start}
+  .top-meta .ic{font-size:19px;line-height:1.5}
   .top-meta b{font-weight:700;color:var(--red)}
-  .letter{font-size:19px;line-height:1.8;margin:14px 0 0;padding:14px 16px;background:var(--paper);border:2px dashed var(--line);border-radius:18px 14px 20px 12px / 14px 20px 12px 18px;word-break:keep-all}
+  .letter{font-size:17.5px;line-height:1.85;margin:14px 0 0;padding:14px 16px;background:var(--paper);border:2px dashed var(--line);border-radius:18px 14px 20px 12px / 14px 20px 12px 18px;word-break:keep-all}
   .letter em{font-style:normal;color:var(--red);font-weight:700}
+  .homefoot{text-align:center;color:#fff;font-size:17px;margin:16px 0 4px}
 
-  /* destination picker */
-  .dests{display:grid;gap:12px;margin-top:12px}
-  .dest{
-    appearance:none;cursor:pointer;width:100%;text-align:left;font-family:var(--hand);color:var(--ink);
-    display:grid;grid-template-columns:44px 1fr 22px;gap:10px;align-items:start;
-    padding:14px 12px 12px 12px;border:2px solid var(--ink);background:var(--paper);
-    border-radius:20px 14px 18px 12px / 14px 18px 12px 20px;box-shadow:4px 4px 0 var(--green-light);
-    transition:transform .15s, box-shadow .15s;
+  /* hotel bar on 일정 page */
+  .hotelbar{
+    display:flex;align-items:center;gap:8px;background:var(--snow);border:2px solid var(--ink);
+    border-radius:16px 12px 14px 10px/12px 14px 10px 16px;padding:9px 12px;margin-bottom:12px;
+    box-shadow:3px 3px 0 var(--green-light);font-size:14.5px;
   }
-  .dest:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--red-light)}
-  .dest:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--green-light)}
-  .dest .em{font-size:30px;line-height:1.2}
-  .dest .body{display:grid;gap:2px}
-  .dest .nm{font-weight:700;font-size:22px;line-height:1.2}
-  .dest .nm small{font-weight:400;font-size:14px;color:var(--soft);margin-left:4px}
-  .dest .tt{font-family:var(--title);font-size:20px;color:var(--red);line-height:1.2}
-  .dest .bl{font-size:16px;color:var(--ink);line-height:1.5;word-break:keep-all}
-  .dest .chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
-  .dest .chips li{list-style:none;font-size:13px;font-weight:700;padding:0 8px;border-radius:10px 8px 9px 7px / 8px 9px 7px 10px;border:2px solid var(--green);color:var(--green-deep);background:var(--green-light)}
-  .dest .arr{font-size:22px;color:var(--red);align-self:center}
-  .back{
-    appearance:none;cursor:pointer;font-family:var(--hand);font-weight:700;font-size:17px;color:#fff;background:var(--red);
-    border:2px solid var(--ink);padding:5px 14px;border-radius:16px 12px 14px 10px / 12px 14px 10px 16px;box-shadow:3px 3px 0 var(--ink);margin:0 0 4px;
+  .hotelbar .ic{font-size:19px;flex:none}
+  .hotelbar .txt{flex:1;line-height:1.35;word-break:keep-all}
+  .hotelbar .txt b{color:var(--red)}
+  .hotelbar a{font-weight:700;color:var(--green-deep);text-decoration:underline wavy;text-underline-offset:3px;text-decoration-color:var(--green-light);white-space:nowrap;flex:none;font-size:14px}
+
+  /* day tabs + swiper */
+  .daynav{display:flex;gap:8px;margin-bottom:10px}
+  .dtab{
+    flex:1;appearance:none;cursor:pointer;font-family:var(--hand);font-weight:700;font-size:16px;
+    color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:16px 12px 14px 10px/12px 14px 10px 16px;
+    padding:8px 4px;box-shadow:3px 3px 0 var(--green-light);transition:transform .12s;
   }
-  .back.bottom{margin-top:18px}
-  .back:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+  .dtab.active{background:var(--red);color:#fff;box-shadow:3px 3px 0 var(--red-deep)}
+  .dtab:active{transform:translate(1px,1px)}
+  .swiper{overflow:hidden;touch-action:pan-y}
+  .track{display:flex;width:200%;transition:transform .32s cubic-bezier(.22,.8,.3,1)}
+  .slide{width:50%;flex:none;padding:2px 2px 0}
+  .dayttl{font-family:var(--title);font-size:20px;margin:2px 0 12px;color:var(--ink)}
+  .hint{font-size:13.5px;color:var(--soft);margin:0 0 10px}
 
-  .day{margin-top:14px}
-  .dayhead{display:flex;align-items:center;gap:10px;margin:0 0 10px;border-bottom:3px dotted var(--line);padding-bottom:8px}
-  .dayhead .n{width:38px;height:38px;border-radius:50% 46% 52% 48%/48% 52% 46% 50%;background:var(--red);color:#fff;display:grid;place-items:center;font-weight:700;font-size:22px;border:2px solid var(--ink);flex:none}
-  .dayhead h3{margin:0;font-size:22px;font-weight:700;line-height:1.2}
-  .dayhead .d{color:var(--soft);font-size:16px;margin-left:auto;white-space:nowrap}
-  .tl{list-style:none;margin:0;padding:0}
-  .tl li{display:grid;grid-template-columns:56px 1fr;gap:10px;padding:10px 0;border-bottom:2px dashed var(--line)}
-  .tl li:last-child{border-bottom:0}
-  .tl time{font-weight:700;font-size:19px;color:var(--green);font-variant-numeric:tabular-nums;line-height:1.4}
-  .tl .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-  .tl .ic{font-size:20px;line-height:1;flex:none}
-  .tl .tag{font-size:13px;font-weight:700;line-height:1.3;padding:1px 8px;border-radius:10px 8px 9px 7px / 8px 9px 7px 10px;border:2px solid currentColor;color:var(--green);background:var(--green-light);flex:none}
-  .tl .tag.move{color:#5B6B7A;background:#E9EEF3}
-  .tl .tag.meal{color:var(--red);background:var(--red-light)}
-  .tl .tag.stay{color:#7A5A2A;background:#F6ECDA}
-  .tl .tag.spa{color:#3B6F9A;background:#DFEDF8}
-  .tl .tag.shop{color:#8A4B9A;background:#F1E4F6}
-  .tl .tag.sweet{color:#C2577A;background:#FBE4EC}
-  .tl .what{font-weight:700;font-size:18px;line-height:1.4;margin-top:2px}
-  .tl .how{font-size:16px;color:var(--soft);margin-top:1px;line-height:1.55;word-break:keep-all}
-  .tl .sun{color:var(--red)}
+  .timeline{list-style:none;margin:0;padding:0 0 0 2px}
+  .titem{position:relative;padding-bottom:12px}
+  .titem:last-child{padding-bottom:0}
+  .titem .rail{position:absolute;left:66px;top:0;bottom:0;width:2px;background:var(--line);z-index:0}
+  .titem:last-child .rail{bottom:50%}
+  .titem .dot{position:absolute;left:61px;top:10px;width:12px;height:12px;border-radius:50%;background:var(--green);border:2px solid var(--ink);z-index:1}
+  .thead{
+    position:relative;display:grid;grid-template-columns:54px 24px 1fr 16px;align-items:center;gap:6px;
+    width:100%;text-align:left;background:var(--paper);border:2px solid var(--ink);border-radius:14px 10px 12px 10px/10px 12px 10px 14px;
+    padding:9px 10px 9px 10px;cursor:pointer;font-family:var(--hand);box-shadow:2px 2px 0 var(--green-light);
+  }
+  .thead time{font-weight:700;font-size:15.5px;color:var(--green-deep);font-variant-numeric:tabular-nums}
+  .thead .ic{font-size:18px;text-align:center}
+  .thead .tag{grid-column:3;justify-self:start;font-size:11.5px;font-weight:700;padding:1px 7px;border-radius:9px 7px 8px 6px/7px 8px 6px 9px;border:2px solid currentColor;color:var(--green);background:var(--green-light);margin-bottom:2px}
+  .thead .ttl{grid-column:3;font-weight:700;font-size:15.5px;color:var(--ink);line-height:1.3;word-break:keep-all;grid-row:2}
+  .thead{grid-template-rows:auto auto}
+  .thead .chev{grid-row:1/3;font-size:14px;color:var(--soft);transition:transform .2s;align-self:center}
+  .titem.open .chev{transform:rotate(180deg)}
+  .titem.open .thead{border-color:var(--red)}
+  .tag.move{color:#5B6B7A;background:#E9EEF3}
+  .tag.meal{color:var(--red);background:var(--red-light)}
+  .tag.stay{color:#7A5A2A;background:#F6ECDA}
+  .tag.spa{color:#3B6F9A;background:#DFEDF8}
+  .tag.shop{color:#8A4B9A;background:#F1E4F6}
+  .tag.sweet{color:#C2577A;background:#FBE4EC}
+  .tag.history{color:#6B5B2A;background:#F2EAD2}
+  .ttl.sun{color:var(--red)}
+  .tbody{max-height:0;overflow:hidden;transition:max-height .28s ease}
+  .titem.open .tbody{max-height:260px}
+  .tbody p{margin:7px 2px 2px 10px;padding:8px 10px;background:var(--snow);border-left:3px solid var(--line);font-size:14.5px;line-height:1.55;color:var(--soft);word-break:keep-all}
 
-  .links{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:8px}
-  .link{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:10px 14px;border:2px solid var(--ink);background:var(--paper);border-radius:18px 12px 16px 12px / 12px 16px 12px 18px;text-decoration:none;color:var(--ink);box-shadow:3px 3px 0 var(--green-light);transition:transform .15s, box-shadow .15s}
-  .link:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--red-light)}
-  .link .t{font-weight:700;font-size:18px;line-height:1.3}
-  .link .s{font-size:15px;color:var(--soft);display:block;margin-top:1px}
-  .link .arr{font-size:22px;color:var(--red)}
-  .note{margin:14px 0 0;padding:12px 14px;background:var(--red-light);border:2px solid var(--red);border-radius:16px 12px 18px 10px / 12px 18px 10px 16px;font-size:16.5px;line-height:1.6;word-break:keep-all}
+  .dots{display:flex;justify-content:center;gap:6px;margin:14px 0 2px}
+  .dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.4);display:block}
+  .dots i.active{background:#fff}
+
+  .note{margin:14px 2px 0;padding:11px 13px;background:var(--red-light);border:2px solid var(--red);border-radius:16px 12px 18px 10px / 12px 18px 10px 16px;font-size:14.5px;line-height:1.6;word-break:keep-all}
   .note.green{background:var(--green-light);border-color:var(--green)}
-  .check{list-style:none;padding:0;margin:10px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;font-size:17px}
+
+  .links{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+  .link{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:10px 14px;border:2px solid var(--ink);background:var(--paper);border-radius:18px 12px 16px 12px / 12px 16px 12px 18px;text-decoration:none;color:var(--ink);box-shadow:3px 3px 0 var(--green-light)}
+  .link .t{font-weight:700;font-size:16.5px;line-height:1.3}
+  .link .s{font-size:13.5px;color:var(--soft);display:block;margin-top:1px}
+  .link .arr{font-size:20px;color:var(--red)}
+
+  .check{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;font-size:15.5px}
   .check li{display:flex;gap:8px;align-items:center}
-  .check li::before{content:"";width:16px;height:16px;border:2px solid var(--green);border-radius:5px 3px 6px 3px;flex:none;background:#fff}
-  .foot{text-align:center;margin-top:30px;color:#fff;font-size:20px;line-height:1.5}
-  .foot .k{display:block;font-size:17px;opacity:.95}
+  .check li::before{content:"";width:15px;height:15px;border:2px solid var(--green);border-radius:5px 3px 6px 3px;flex:none;background:#fff}
 
   @media (prefers-reduced-motion: reduce){
-    .btn-join,.link,.dest{transition:none}
-    .shake,.spin .cyl,.bang.show,.flash.on{animation:none}
+    .track,.tbody,.pwBtn,.dtab{transition:none}
+    .shake{animation:none}
     .snow{display:none}
   }
-
-  .tl .tag.history{color:#6B5B2A;background:#F2EAD2}
 </style>
 </head>
 <body>
@@ -223,271 +194,352 @@
   <i style="left:87%;animation-duration:15s;animation-delay:-10s"></i>
   <i style="left:94%;animation-duration:12s;animation-delay:-6s;width:6px;height:6px"></i>
 </div>
-<div class="flash" id="flash" aria-hidden="true"></div>
 
-<div class="wrap">
-
-  <!-- ================= GATE ================= -->
-  <div class="card gate" id="gate">
-    <div class="inner">
-      <div class="garland" aria-hidden="true"><b></b><b></b><b></b><b></b><b></b></div>
-      <div id="quiz">
-        <h1>세훈임을 인증해보시죠</h1>
-        <p class="sub">세 문제 다 맞혀야 초대장이 열려요</p>
-        <div class="steps" id="steps" aria-hidden="true"><b class="now"></b><b></b><b></b></div>
-        <p class="q" id="qText"></p>
-        <ul class="opts" id="opts"></ul>
-        <p class="ok-msg" id="okMsg" aria-live="polite"></p>
-      </div>
-      <div class="spy" id="spy" hidden>
-        <h1>간첩은 나가주세요.</h1>
-        <p>신원 확인 실패. 절차대로 진행합니다.</p>
-        <svg class="gun" viewBox="0 0 200 200" role="img" aria-label="돌아가는 리볼버 실린더" xmlns="http://www.w3.org/2000/svg">
-          <g class="cyl">
-            <circle cx="100" cy="100" r="78" fill="#4A4A52" stroke="#3A2A2A" stroke-width="4"/>
-            <circle cx="100" cy="100" r="62" fill="#5C5C66" stroke="#3A2A2A" stroke-width="2"/>
-            <g fill="#1E1E24" stroke="#3A2A2A" stroke-width="2.5">
-              <circle cx="100" cy="48" r="13"/><circle cx="145" cy="74" r="13"/><circle cx="145" cy="126" r="13"/>
-              <circle cx="100" cy="152" r="13"/><circle cx="55" cy="126" r="13"/><circle cx="55" cy="74" r="13"/>
-            </g>
-            <circle cx="100" cy="48" r="7" fill="#D9414A"/>
-            <circle cx="100" cy="100" r="10" fill="#2A2A30" stroke="#3A2A2A" stroke-width="2"/>
-          </g>
-          <path d="M100 6 l-9 14 h18 z" fill="#D9414A" stroke="#3A2A2A" stroke-width="2"/>
-        </svg>
-        <p class="bang" id="bang">탕!</p>
-      </div>
-      <div class="spy locked" id="locked" hidden>
-        <p class="big">🚫</p>
-        <h1>간첩은 나가주세요.</h1>
-        <p>이 초대장은 세훈이만 볼 수 있어요.<br>세훈이라면 링크를 다시 열어 처음부터 인증해주세요.</p>
-      </div>
-    </div>
+<!-- ================= PASSWORD GATE ================= -->
+<div class="gatewrap" id="gatewrap">
+  <div class="gate">
+    <div class="garland" aria-hidden="true"><b></b><b></b><b></b><b></b><b></b></div>
+    <h1>크리스마스 초대장</h1>
+    <p class="sub">비밀번호를 입력하면 열려</p>
+    <form id="pwForm">
+      <input id="pwInput" type="tel" inputmode="numeric" autocomplete="off" maxlength="8" placeholder="••••••" aria-label="비밀번호">
+      <button class="pwBtn" type="submit">열기</button>
+      <p class="pwErr" id="pwErr" aria-live="polite"></p>
+    </form>
   </div>
+</div>
 
-  <!-- ================= INVITE ================= -->
-  <div class="card" id="invite" hidden>
-    <div class="inner">
-      <div class="garland" aria-hidden="true"><b></b><b></b><b></b><b></b><b></b></div>
-      <svg class="snowman" viewBox="0 0 200 230" role="img" aria-label="빨간 목도리를 두른 귀여운 눈사람" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="100" cy="214" rx="78" ry="10" fill="#E6EEF5"/>
-        <path d="M100 222c-38 0-62-20-62-48 0-27 24-48 62-48s62 21 62 48c0 28-24 48-62 48z" fill="#fff" stroke="#3A2A2A" stroke-width="3"/>
-        <circle cx="100" cy="150" r="4" fill="#2E7D4F"/><circle cx="100" cy="168" r="4" fill="#D9414A"/><circle cx="100" cy="186" r="4" fill="#2E7D4F"/>
-        <g stroke="#7A4B2A" stroke-width="3.2" stroke-linecap="round" fill="none">
-          <path d="M44 160 L16 138"/><path d="M26 146 L18 132"/><path d="M26 146 L12 150"/>
-          <path d="M156 160 L184 138"/><path d="M174 146 L182 132"/><path d="M174 146 L188 150"/>
-        </g>
-        <path d="M100 128c-27 0-44-16-44-38s17-40 44-40 44 18 44 40-17 38-44 38z" fill="#fff" stroke="#3A2A2A" stroke-width="3"/>
-        <path d="M58 118c10 10 28 15 42 15s32-5 42-15c-6 12-22 20-42 20s-36-8-42-20z" fill="#D9414A" stroke="#3A2A2A" stroke-width="2.5" stroke-linejoin="round"/>
-        <path d="M120 128 l18 30 c2 3-1 6-4 5 l-20 -12 z" fill="#D9414A" stroke="#3A2A2A" stroke-width="2.5" stroke-linejoin="round"/>
-        <g stroke="#fff" stroke-width="2" opacity=".8"><path d="M124 140 l6 10"/><path d="M130 136 l6 10"/></g>
-        <circle cx="86" cy="86" r="3.6" fill="#3A2A2A"/><circle cx="114" cy="86" r="3.6" fill="#3A2A2A"/>
-        <circle cx="87.5" cy="84.5" r="1.1" fill="#fff"/><circle cx="115.5" cy="84.5" r="1.1" fill="#fff"/>
-        <ellipse cx="74" cy="98" rx="7" ry="4.5" fill="#F7B2B7" opacity=".9"/><ellipse cx="126" cy="98" rx="7" ry="4.5" fill="#F7B2B7" opacity=".9"/>
-        <path d="M100 92 L128 98 L100 102 z" fill="#F08A3C" stroke="#3A2A2A" stroke-width="2.2" stroke-linejoin="round"/>
-        <path d="M90 108 q10 7 20 0" fill="none" stroke="#3A2A2A" stroke-width="2.4" stroke-linecap="round"/>
-        <path d="M66 58 q34 -10 68 0 l-4 -8 q-30 -8 -60 0 z" fill="#2E7D4F" stroke="#3A2A2A" stroke-width="2.5" stroke-linejoin="round"/>
-        <path d="M74 52 c0 -22 10 -36 26 -36 s26 14 26 36 q-26 -8 -52 0 z" fill="#2E7D4F" stroke="#3A2A2A" stroke-width="2.5" stroke-linejoin="round"/>
-        <path d="M74 52 q26 -8 52 0 l0 7 q-26 -8 -52 0 z" fill="#D9414A" stroke="#3A2A2A" stroke-width="2.2" stroke-linejoin="round"/>
-        <circle cx="100" cy="17" r="6" fill="#fff" stroke="#3A2A2A" stroke-width="2.2"/>
-        <path d="M120 44 q6 -8 14 -4 q-6 2 -8 10 z" fill="#2E7D4F" stroke="#3A2A2A" stroke-width="1.6"/>
-        <circle cx="121" cy="48" r="2.6" fill="#D9414A"/><circle cx="126" cy="50" r="2.4" fill="#D9414A"/>
-        <path d="M150 84 c-6 -8 -16 0 -8 8 l8 7 l8 -7 c8 -8 -2 -16 -8 -8z" fill="#9FD3F2" stroke="#3A2A2A" stroke-width="1.8" transform="rotate(12 150 88)"/>
-        <g stroke="#9FC7E8" stroke-width="1.6" stroke-linecap="round" fill="none">
-          <path d="M30 60 v12 M24 66 h12 M26 62 l8 8 M34 62 l-8 8"/>
-          <path d="M172 24 v10 M167 29 h10 M168.5 25.5 l7 7 M175.5 25.5 l-7 7"/>
-          <path d="M22 104 v8 M18 108 h8"/>
-        </g>
-      </svg>
-      <h1>크리스마스 초대장</h1>
-      <p class="hello">나랑 놀자 🩵</p>
-      <div class="rsvp" id="rsvp">
-        <button class="btn-join" id="joinBtn" type="button">함께하기<small>좋아!</small></button>
-        <br>
-        <button class="btn-small" id="declineBtn" type="button">거절하기</button>
-        <button class="btn-small again" id="againBtn" type="button" hidden>다시 생각하기</button>
-        <p class="nag" id="nag" aria-live="polite"></p>
-        <p class="accepted" id="accepted"><b>야호!</b>함께하기로 했어요.<br>아래에서 일정 확인해줘.</p>
+<!-- ================= APP ================= -->
+<div id="app">
+  <nav class="topnav" aria-label="목차">
+    <button class="navbtn active" type="button" data-page="home">🏠 개요</button>
+    <button class="navbtn" type="button" data-page="plan">🗓 일정</button>
+    <button class="navbtn" type="button" data-page="links">🔗 링크</button>
+    <button class="navbtn" type="button" data-page="pack">🎒 준비물</button>
+  </nav>
+
+  <div class="wrap">
+
+    <!-- ---- HOME ---- -->
+    <section class="page active" id="page-home">
+      <div class="sheet red">
+        <span class="kicker">🦀 강원도 고성</span>
+        <h2>동해 가장 끝, 송지호 앞바다</h2>
+        <ul class="top-meta">
+          <li><span class="ic">📅</span><span><b>12월 25일(금) ~ 26일(토)</b> 1박 2일</span></li>
+          <li><span class="ic">📍</span><span><b>강원도 고성</b> · 서울에서 차로 약 2시간 20분</span></li>
+          <li><span class="ic">🦀</span><span>25일 저녁은 확정! <b>봉포대게찜 게섯거라</b></span></li>
+        </ul>
+        <p class="letter">
+          사람 많은 곳 말고,<br>
+          바다 바로 앞 방에서 늦게까지 뒹굴다<br>
+          몽돌 소리 들으며 걷고<br>
+          <em>대게찜</em> 한 상 비우는 크리스마스.<br>
+          밤엔 우리가 가져온 케이크에 초를 켜고,<br>
+          다음 날엔 한반도 가장 북쪽 바다까지 가보자!
+        </p>
       </div>
-    </div>
+      <p class="homefoot">메리 크리스마스 🎄</p>
+    </section>
+
+    <!-- ---- PLAN ---- -->
+    <section class="page" id="page-plan">
+      <div class="hotelbar">
+        <span class="ic">🏨</span>
+        <span class="txt"><b>르네블루 by 쏠비치</b> · 고성군 죽왕면 심층수길 96</span>
+        <a href="https://map.naver.com/p/search/%EB%A5%B4%EB%84%A4%EB%B8%94%EB%A3%A8%20by%20%EC%8F%A0%EB%B9%84%EC%B9%98%20%EA%B3%A0%EC%84%B1" target="_blank" rel="noopener">지도 보기 →</a>
+      </div>
+
+      <div class="daynav">
+        <button class="dtab active" type="button" data-day="0">Day 1 · 12/25</button>
+        <button class="dtab" type="button" data-day="1">Day 2 · 12/26</button>
+      </div>
+
+      <div class="swiper" id="swiper">
+        <div class="track" id="track">
+          <div class="slide">
+            <p class="dayttl">몽돌, 한옥마을, 대게찜</p>
+            <p class="hint">👆 항목을 누르면 자세히 보여줘</p>
+            <ol class="timeline">
+          <li class="titem">
+            <button class="thead" type="button">
+              <span class="rail" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span>
+              <time>09:30</time><span class="ic">🚗</span>
+              <span class="tag move">이동</span><span class="ttl">서울 출발</span>
+              <span class="chev" aria-hidden="true">⌄</span>
+            </button>
+            <div class="tbody"><p>서울양양고속도로 → 속초 경유, 약 2시간 20분. 크리스마스 당일은 아침 일찍 출발이 안전해.</p></div>
+          </li>
+          <li class="titem">
+            <button class="thead" type="button">
+              <span class="rail" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span>
+              <time>11:50</time><span class="ic">🐚</span>
+              <span class="tag nature">산책</span><span class="ttl">아야진해변 몽돌해변 산책</span>
+              <span class="chev" aria-hidden="true">⌄</span>
+            </button>
+            <div class="tbody"><p>파도에 구르는 동글동글한 몽돌 소리가 좋은 작은 해변. 20분.</p></div>
+          </li>
+          <li class="titem">
+            <button class="thead" type="button">
+              <span class="rail" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span>
+              <time>12:20</time><span class="ic">🐟</span>
+              <span class="tag meal">점심</span><span class="ttl">아야진 유리집식당 생선구이</span>
+              <span class="chev" aria-hidden="true">⌄</span>
+            </button>
+            <div class="tbody"><p>해변 바로 앞. 생선구이 한 상에 찌개까지, 든든하게.</p></div>
+          </li>
+          <li class="titem">
+            <button class="thead" type="button">
+              <span class="rail" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span>
+              <time>14:00</time><span class="ic">🏘️</span>
+              <span class="tag shop">마을</span><span class="ttl">왕곡마을 전통한옥마을</span>
+              <span class="chev" aria-hidden="true">⌄</span>
+            </button>
+            <div class="tbody"><p>국가민속문화유산. 19세기 북방식 한옥이 그대로 남은 마을. 호텔 가는 길에 있어서 들르기 좋아. 09:00~18:00.</p></div>
+          </li>
+          <li class="titem">
+            <button class="thead" type="button">
+              <span class="rail" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span>
+              <time>15:00</time><span class="ic">🏨</span>
+              <span class="tag stay">체크인</span><span class="ttl">르네블루 by 쏠비치 체크인</span>
+              <span class="chev" aria-hidden="true">⌄</span>
+            </button>
+            <div class="tbody"><p>송지호해변 바로 앞, 객실에서 바다가 보여. 케이크는 냉장고에.</p></div>
+          </li>
+          <li class="titem">
+            <button class="thead" type="button">
+              <span class="rail" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span>
+              <time>15:40</time><span class="ic">🚶</span>
+              <span class="tag nature">산책</span><span class="ttl">송지호 둘레길</span>
+              <span class="chev" aria-hidden="true">⌄</span>
+            </button>
+            <div class="tbody"><p>호텔 뒤편 호수를 한 바퀴. 자전거 대여도 가능. 1시간.</p></div>
+          </li>
+          <li class="titem">
+            <button class="thead" type="button">
+              <span class="rail" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span>
+              <time>17:10</time><span class="ic">🌅</span>
+              <span class="tag nature">일몰</span><span class="ttl sun">송지호 전망대에서 일몰</span>
+              <span class="chev" aria-hidden="true">⌄</span>
+            </button>
+            <div class="tbody"><p>관망타워 5층 카페에서 호수와 바다를 한눈에. 겨울이라 해가 빨리 져.</p></div>
+          </li>
+          <li class="titem">
+            <button class="thead" type="button">
+              <span class="rail" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span>
+              <time>18:00</time><span class="ic">🦀</span>
+              <span class="tag meal">저녁</span><span class="ttl">봉포대게찜 게섯거라</span>
+              <span class="chev" aria-hidden="true">⌄</span>
+            </button>
+            <div class="tbody"><p>고성군 토성면 광포길 58. 1층 수조에서 무게·가격 보고 2층으로 올라가는 찜집, 창가 자리면 봉포 해변 뷰. 수요일 휴무, 브레이크타임 14~16시.</p></div>
+          </li>
+          <li class="titem">
+            <button class="thead" type="button">
+              <span class="rail" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span>
+              <time>20:00</time><span class="ic">🌃</span>
+              <span class="tag spa">라운지</span><span class="ttl">11층 블루스카이에서 야경</span>
+              <span class="chev" aria-hidden="true">⌄</span>
+            </button>
+            <div class="tbody"><p>루프탑 라운지에서 와인 한 잔, 바다와 밤하늘 보기.</p></div>
+          </li>
+          <li class="titem">
+            <button class="thead" type="button">
+              <span class="rail" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span>
+              <time>21:00</time><span class="ic">🎂</span>
+              <span class="tag sweet">디저트</span><span class="ttl">룸에서 케이크 + 와인</span>
+              <span class="chev" aria-hidden="true">⌄</span>
+            </button>
+            <div class="tbody"><p>가져온 케이크에 초 켜고 크리스마스 밤.</p></div>
+          </li>
+            </ol>
+            <div class="note green"><b>메모</b> · 르네블루는 수영장·스파가 없는 호텔이라, 밤은 11층 라운지와 룸에서 보내는 걸로 짰어.</div>
+          </div>
+          <div class="slide">
+            <p class="dayttl">일출, 별장, 최북단</p>
+            <p class="hint">👆 항목을 누르면 자세히 보여줘</p>
+            <ol class="timeline">
+          <li class="titem">
+            <button class="thead" type="button">
+              <span class="rail" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span>
+              <time>07:50</time><span class="ic">🌅</span>
+              <span class="tag nature">일출</span><span class="ttl sun">객실 앞 바다에서 일출</span>
+              <span class="chev" aria-hidden="true">⌄</span>
+            </button>
+            <div class="tbody"><p>송지호해변 바로 앞이라 창문만 열면 돼. 담요 하나 챙겨서 나가기.</p></div>
+          </li>
+          <li class="titem">
+            <button class="thead" type="button">
+              <span class="rail" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span>
+              <time>09:00</time><span class="ic">🍳</span>
+              <span class="tag meal">조식</span><span class="ttl">호텔 또는 근처에서 조식</span>
+              <span class="chev" aria-hidden="true">⌄</span>
+            </button>
+            <div class="tbody"><p>패키지 조식이면 2층 블루키친, 아니면 송지호 근처 카페에서 가볍게.</p></div>
+          </li>
+          <li class="titem">
+            <button class="thead" type="button">
+              <span class="rail" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span>
+              <time>10:30</time><span class="ic">🚗</span>
+              <span class="tag move">이동</span><span class="ttl">체크아웃 → 화진포</span>
+              <span class="chev" aria-hidden="true">⌄</span>
+            </button>
+            <div class="tbody"><p>북쪽으로 약 40분.</p></div>
+          </li>
+          <li class="titem">
+            <button class="thead" type="button">
+              <span class="rail" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span>
+              <time>11:10</time><span class="ic">🎖️</span>
+              <span class="tag history">역사</span><span class="ttl">화진포해변 + 이승만·김일성 별장</span>
+              <span class="chev" aria-hidden="true">⌄</span>
+            </button>
+            <div class="tbody"><p>모래가 소리 나는 백사장과 산기슭의 중세풍 성(김일성별장 · 화진포의 성), 초대 대통령의 별장까지 한 번에. 1시간.</p></div>
+          </li>
+          <li class="titem">
+            <button class="thead" type="button">
+              <span class="rail" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span>
+              <time>12:30</time><span class="ic">🚗</span>
+              <span class="tag move">이동</span><span class="ttl">화진포 → 통일전망대</span>
+              <span class="chev" aria-hidden="true">⌄</span>
+            </button>
+            <div class="tbody"><p>약 20분. 출입신고소에서 신분증 제시 → 앱 신고 → 안보교육 영상 순서.</p></div>
+          </li>
+          <li class="titem">
+            <button class="thead" type="button">
+              <span class="rail" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span>
+              <time>13:00</time><span class="ic">🎖️</span>
+              <span class="tag history">최북단</span><span class="ttl">통일전망대 · DMZ박물관</span>
+              <span class="chev" aria-hidden="true">⌄</span>
+            </button>
+            <div class="tbody"><p>한반도 최북단에서 북한 땅을 바라보기. 겨울철 출입신고소는 15:50까지 출발 가능. 왕복 약 1시간 반.</p></div>
+          </li>
+          <li class="titem">
+            <button class="thead" type="button">
+              <span class="rail" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span>
+              <time>15:00</time><span class="ic">🍲</span>
+              <span class="tag meal">점심</span><span class="ttl">거진항에서 늦은 점심</span>
+              <span class="chev" aria-hidden="true">⌄</span>
+            </button>
+            <div class="tbody"><p>내려오는 길 약 20분. 곰치국이나 대게백반으로 해장 겸, 항구 구경도 잠깐.</p></div>
+          </li>
+          <li class="titem">
+            <button class="thead" type="button">
+              <span class="rail" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span>
+              <time>16:30</time><span class="ic">🎡</span>
+              <span class="tag shop">체험</span><span class="ttl">갯배 타고 아바이마을 + 중앙시장</span>
+              <span class="chev" aria-hidden="true">⌄</span>
+            </button>
+            <div class="tbody"><p>거진항에서 속초까지 약 40분. 편도 500원 갯배로 바다를 건너고, 중앙시장에서 닭강정 포장 + 소품샵 구경.</p></div>
+          </li>
+          <li class="titem">
+            <button class="thead" type="button">
+              <span class="rail" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span>
+              <time>18:00</time><span class="ic">🚗</span>
+              <span class="tag move">이동</span><span class="ttl">서울 도착</span>
+              <span class="chev" aria-hidden="true">⌄</span>
+            </button>
+            <div class="tbody"><p>저녁 즈음 집. 닭강정은 차에서 바로.</p></div>
+          </li>
+            </ol>
+            <div class="note green"><b>메모</b> · 통일전망대는 신분증이 꼭 필요하고, 겨울철은 출입신고소 15:50까지 출발해야 들어갈 수 있어.</div>
+          </div>
+        </div>
+      </div>
+      <div class="dots" aria-hidden="true"><i class="active"></i><i></i></div>
+    </section>
+
+    <!-- ---- LINKS ---- -->
+    <section class="page" id="page-links">
+      <div class="sheet">
+        <span class="kicker">세부 링크</span>
+        <h2>눌러서 확인하기</h2>
+        <ul class="links">
+        <li><a class="link" href="https://nol.yanolja.com/stay/domestic/1000109326" target="_blank" rel="noopener"><span><span class="t">르네블루 by 쏠비치</span><span class="s">고성군 죽왕면 심층수길 96 · 예약</span></span><span class="arr">→</span></a></li>
+        <li><a class="link" href="https://map.naver.com/p/search/%EA%B2%8C%EC%84%AF%EA%B1%B0%EB%9D%BC%20%EA%B3%A0%EC%84%B1" target="_blank" rel="noopener"><span><span class="t">봉포대게찜 게섯거라</span><span class="s">고성군 토성면 광포길 58 · 033-631-6313</span></span><span class="arr">→</span></a></li>
+        <li><a class="link" href="https://map.naver.com/p/search/%EC%9C%A0%EB%A6%AC%EC%A7%91%EC%8B%9D%EB%8B%B9%20%EC%95%84%EC%95%BC%EC%A7%84" target="_blank" rel="noopener"><span><span class="t">아야진해변 유리집식당</span><span class="s">생선구이 · 해변 바로 앞</span></span><span class="arr">→</span></a></li>
+        <li><a class="link" href="https://map.naver.com/p/search/%EA%B3%A0%EC%84%B1%20%EC%99%95%EA%B3%A1%EB%A7%88%EC%9D%84" target="_blank" rel="noopener"><span><span class="t">왕곡마을</span><span class="s">전통한옥마을 · 09:00~18:00</span></span><span class="arr">→</span></a></li>
+        <li><a class="link" href="https://map.naver.com/p/search/%EC%86%A1%EC%A7%80%ED%98%B8%ED%95%B4%EC%88%98%EC%9A%95%EC%9E%A5" target="_blank" rel="noopener"><span><span class="t">송지호 둘레길 · 전망대</span><span class="s">호수 산책 · 관망타워 카페</span></span><span class="arr">→</span></a></li>
+        <li><a class="link" href="https://map.naver.com/p/search/%ED%99%94%EC%A7%84%ED%8F%AC%ED%95%B4%EB%B3%80" target="_blank" rel="noopener"><span><span class="t">화진포해변 · 이승만별장 · 김일성별장</span><span class="s">화진포의 성 · 역사 탐방</span></span><span class="arr">→</span></a></li>
+        <li><a class="link" href="https://www.dmzmuseum.com/museum/information" target="_blank" rel="noopener"><span><span class="t">통일전망대 · DMZ박물관</span><span class="s">출입절차 안내 · 033-681-0625</span></span><span class="arr">→</span></a></li>
+        <li><a class="link" href="https://map.naver.com/p/search/%EA%B1%B0%EC%A7%84%ED%95%AD" target="_blank" rel="noopener"><span><span class="t">거진항</span><span class="s">곰치국 · 대게 · 항구</span></span><span class="arr">→</span></a></li>
+        <li><a class="link" href="https://map.naver.com/p/search/%EC%95%84%EB%B0%94%EC%9D%B4%EB%A7%88%EC%9D%84" target="_blank" rel="noopener"><span><span class="t">아바이마을 · 속초중앙시장</span><span class="s">갯배 체험 · 소품샵 · 닭강정</span></span><span class="arr">→</span></a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ---- PACK ---- -->
+    <section class="page" id="page-pack">
+      <div class="sheet red">
+        <span class="kicker">챙길 것</span>
+        <h2>가방에 넣자</h2>
+        <ul class="check">
+          <li>케이크 + 초 + 라이터</li><li>와인 + 오프너 + 잔</li><li>따뜻한 패딩, 목도리</li><li>신분증 (통일전망대 필수)</li><li>걷기 좋은 운동화</li><li>담요 (일출용)</li><li>카메라</li><li>간식 담을 가방</li>
+        </ul>
+      </div>
+    </section>
+
   </div>
-
-  <!-- ================= PLAN (확정: 강원도 고성) ================= -->
-  <section id="plan" hidden aria-label="여행 계획">
-
-    <div class="sheet red">
-      <span class="kicker">🦀 강원도 고성</span>
-      <h2>동해 가장 끝, 송지호 앞바다</h2>
-      <ul class="top-meta">
-        <li><span class="ic">📅</span><span><b>12월 25일(금) ~ 26일(토)</b> 1박 2일</span></li>
-        <li><span class="ic">📍</span><span><b>강원도 고성</b> · 서울에서 차로 약 2시간 20분</span></li>
-        <li><span class="ic">🦀</span><span>25일 저녁은 확정! <b>봉포대게찜 게섯거라</b></span></li>
-      </ul>
-      <p class="letter">
-        사람 많은 곳 말고,<br>
-        바다 바로 앞 방에서 늦게까지 뒹굴다<br>
-        몽돌 소리 들으며 걷고<br>
-        <em>대게찜</em> 한 상 비우는 크리스마스.<br>
-        밤엔 우리가 가져온 케이크에 초를 켜고,<br>
-        다음 날엔 한반도 가장 북쪽 바다까지 가보자!
-      </p>
-    </div>
-
-    <div class="sheet">
-      <span class="kicker">우리가 묵을 곳</span>
-      <h2>르네블루 by 쏠비치</h2>
-      <p class="who">고성군 죽왕면 심층수길 96 · 송지호해변 도보 1분</p>
-      <p class="lead">전체 87개 객실 모두 다른 스타일로 꾸며진 오션뷰 호텔. 도로를 건너지 않고 바로 해변으로 나갈 수 있어서, 아침에 눈 뜨면 파도 소리부터 들려.</p>
-      <ul class="facts">
-        <li><span class="ic">🛏️</span><div><b>오션뷰 객실</b> — 송지호해변과 동해를 동시에 보는 방으로 잡자.</div></li>
-        <li><span class="ic">🌃</span><div><b>11층 루프탑 라운지 블루스카이</b> — 밤에 와인 한 잔 하기 좋은 야경 포인트.</div></li>
-        <li><span class="ic">🍽️</span><div><b>2층 블루키친</b> — 조식·디너 가능한 레스토랑.</div></li>
-        <li><span class="ic">🚶</span><div><b>송지호 둘레길</b> — 호텔 바로 뒤편, 체크인 후나 아침에 걷기 좋아.</div></li>
-      </ul>
-      <div class="note green"><b>메모</b> · 체크인 15:00 / 체크아웃 11:00 기준으로 일정 짰어. 수영장·스파는 없는 호텔이라, 그 대신 11층 라운지와 룸에서의 밤을 채웠어.</div>
-      <a class="go" href="https://nol.yanolja.com/stay/domestic/1000109326" target="_blank" rel="noopener">숙소 보기 →</a>
-    </div>
-
-    <div class="sheet red">
-      <span class="kicker">일정표</span>
-      <h2>이틀 동안 뭐 하지?</h2>
-
-      <div class="day">
-        <div class="dayhead"><span class="n">1</span><h3>몽돌, 한옥마을, 대게찜</h3><span class="d">12.25 금</span></div>
-        <ol class="tl"><li><time>09:30</time><div><div class="row"><span class="ic">🚗</span><span class="tag move">이동</span></div><div class="what">서울 출발</div><div class="how">서울양양고속도로 → 속초 경유, 약 2시간 20분. 크리스마스 당일은 아침 일찍 출발이 안전해.</div></div></li><li><time>11:50</time><div><div class="row"><span class="ic">🐚</span><span class="tag nature">산책</span></div><div class="what">아야진해변 몽돌해변 산책</div><div class="how">파도에 구르는 동글동글한 몽돌 소리가 좋은 작은 해변. 20분.</div></div></li><li><time>12:20</time><div><div class="row"><span class="ic">🐟</span><span class="tag meal">점심</span></div><div class="what">아야진 유리집식당 생선구이</div><div class="how">해변 바로 앞. 생선구이 한 상에 찌개까지, 든든하게.</div></div></li><li><time>14:00</time><div><div class="row"><span class="ic">🏘️</span><span class="tag shop">마을</span></div><div class="what">왕곡마을 전통한옥마을</div><div class="how">국가민속문화유산. 19세기 북방식 한옥이 그대로 남은 마을. 호텔 가는 길에 있어서 들르기 좋아. 09:00~18:00.</div></div></li><li><time>15:00</time><div><div class="row"><span class="ic">🏨</span><span class="tag stay">체크인</span></div><div class="what">르네블루 by 쏠비치 체크인</div><div class="how">송지호해변 바로 앞, 객실에서 바다가 보여. 케이크는 냉장고에.</div></div></li><li><time>15:40</time><div><div class="row"><span class="ic">🚶</span><span class="tag nature">산책</span></div><div class="what">송지호 둘레길</div><div class="how">호텔 뒤편 호수를 한 바퀴. 자전거 대여도 가능. 1시간.</div></div></li><li><time>17:10</time><div><div class="row"><span class="ic">🌅</span><span class="tag nature">일몰</span></div><div class="what sun">송지호 전망대에서 일몰</div><div class="how">관망타워 5층 카페에서 호수와 바다를 한눈에. 겨울이라 해가 빨리 져.</div></div></li><li><time>18:00</time><div><div class="row"><span class="ic">🦀</span><span class="tag meal">저녁</span></div><div class="what">봉포대게찜 게섯거라</div><div class="how">고성군 토성면 광포길 58. 1층 수조에서 무게·가격 보고 2층으로 올라가는 찜집, 창가 자리면 봉포 해변 뷰. 수요일 휴무, 브레이크타임 14~16시.</div></div></li><li><time>20:00</time><div><div class="row"><span class="ic">🌃</span><span class="tag spa">라운지</span></div><div class="what">11층 블루스카이에서 야경</div><div class="how">루프탑 라운지에서 와인 한 잔, 바다와 밤하늘 보기.</div></div></li><li><time>21:00</time><div><div class="row"><span class="ic">🎂</span><span class="tag sweet">디저트</span></div><div class="what">룸에서 케이크 + 와인</div><div class="how">가져온 케이크에 초 켜고 크리스마스 밤.</div></div></li></ol>
-      </div>
-
-      <div class="day">
-        <div class="dayhead"><span class="n">2</span><h3>일출, 별장, 최북단</h3><span class="d">12.26 토</span></div>
-        <ol class="tl"><li><time>07:50</time><div><div class="row"><span class="ic">🌅</span><span class="tag nature">일출</span></div><div class="what sun">객실 앞 바다에서 일출</div><div class="how">송지호해변 바로 앞이라 창문만 열면 돼. 담요 하나 챙겨서 나가기.</div></div></li><li><time>09:00</time><div><div class="row"><span class="ic">🍳</span><span class="tag meal">조식</span></div><div class="what">호텔 또는 근처에서 조식</div><div class="how">패키지 조식이면 2층 블루키친, 아니면 송지호 근처 카페에서 가볍게.</div></div></li><li><time>10:30</time><div><div class="row"><span class="ic">🚗</span><span class="tag move">이동</span></div><div class="what">체크아웃 → 화진포</div><div class="how">북쪽으로 약 40분.</div></div></li><li><time>11:10</time><div><div class="row"><span class="ic">🎖️</span><span class="tag history">역사</span></div><div class="what">화진포해변 + 이승만·김일성 별장</div><div class="how">모래가 소리 나는 백사장과 산기슭의 중세풍 성(김일성별장 · 화진포의 성), 초대 대통령의 별장까지 한 번에. 1시간.</div></div></li><li><time>12:30</time><div><div class="row"><span class="ic">🚗</span><span class="tag move">이동</span></div><div class="what">화진포 → 통일전망대</div><div class="how">약 20분. 출입신고소에서 신분증 제시 → 앱 신고 → 안보교육 영상 순서.</div></div></li><li><time>13:00</time><div><div class="row"><span class="ic">🎖️</span><span class="tag history">최북단</span></div><div class="what">통일전망대 · DMZ박물관</div><div class="how">한반도 최북단에서 북한 땅을 바라보기. 겨울철 출입신고소는 15:50까지 출발 가능. 왕복 약 1시간 반.</div></div></li><li><time>15:00</time><div><div class="row"><span class="ic">🍲</span><span class="tag meal">점심</span></div><div class="what">거진항에서 늦은 점심</div><div class="how">내려오는 길 약 20분. 곰치국이나 대게백반으로 해장 겸, 항구 구경도 잠깐.</div></div></li><li><time>16:30</time><div><div class="row"><span class="ic">🎡</span><span class="tag shop">체험</span></div><div class="what">갯배 타고 아바이마을 + 중앙시장</div><div class="how">거진항에서 속초까지 약 40분. 편도 500원 갯배로 바다를 건너고, 중앙시장에서 닭강정 포장 + 소품샵 구경.</div></div></li><li><time>18:00</time><div><div class="row"><span class="ic">🚗</span><span class="tag move">이동</span></div><div class="what">서울 도착</div><div class="how">저녁 즈음 집. 닭강정은 차에서 바로.</div></div></li></ol>
-      </div>
-
-      <div class="note green"><b>메모</b> · 통일전망대는 신분증이 꼭 필요하고, 출입신고소를 거쳐야 해. 겨울철은 15:50까지 출발해야 들어갈 수 있어.</div>
-    </div>
-
-    <div class="sheet">
-      <span class="kicker">세부 링크</span>
-      <h2>눌러서 확인하기</h2>
-      <ul class="links"><li><a class="link" href="https://nol.yanolja.com/stay/domestic/1000109326" target="_blank" rel="noopener"><span><span class="t">르네블루 by 쏠비치</span><span class="s">고성군 죽왕면 심층수길 96 · 예약</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%EA%B2%8C%EC%84%AF%EA%B1%B0%EB%9D%BC%20%EA%B3%A0%EC%84%B1" target="_blank" rel="noopener"><span><span class="t">봉포대게찜 게섯거라</span><span class="s">고성군 토성면 광포길 58 · 033-631-6313</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%EC%9C%A0%EB%A6%AC%EC%A7%91%EC%8B%9D%EB%8B%B9%20%EC%95%84%EC%95%BC%EC%A7%84" target="_blank" rel="noopener"><span><span class="t">아야진해변 유리집식당</span><span class="s">생선구이 · 해변 바로 앞</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%EA%B3%A0%EC%84%B1%20%EC%99%95%EA%B3%A1%EB%A7%88%EC%9D%84" target="_blank" rel="noopener"><span><span class="t">왕곡마을</span><span class="s">전통한옥마을 · 09:00~18:00</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%EC%86%A1%EC%A7%80%ED%98%B8%ED%95%B4%EC%88%98%EC%9A%95%EC%9E%A5" target="_blank" rel="noopener"><span><span class="t">송지호 둘레길 · 전망대</span><span class="s">호수 산책 · 관망타워 카페</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%ED%99%94%EC%A7%84%ED%8F%AC%ED%95%B4%EB%B3%80" target="_blank" rel="noopener"><span><span class="t">화진포해변 · 이승만별장 · 김일성별장</span><span class="s">화진포의 성 · 역사 탐방</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://www.dmzmuseum.com/museum/information" target="_blank" rel="noopener"><span><span class="t">통일전망대 · DMZ박물관</span><span class="s">출입절차 안내 · 033-681-0625</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%EA%B1%B0%EC%A7%84%ED%95%AD" target="_blank" rel="noopener"><span><span class="t">거진항</span><span class="s">곰치국 · 대게 · 항구</span></span><span class="arr">→</span></a></li><li><a class="link" href="https://map.naver.com/p/search/%EC%95%84%EB%B0%94%EC%9D%B4%EB%A7%88%EC%9D%84" target="_blank" rel="noopener"><span><span class="t">아바이마을 · 속초중앙시장</span><span class="s">갯배 체험 · 소품샵 · 닭강정</span></span><span class="arr">→</span></a></li></ul>
-    </div>
-
-    <div class="sheet red">
-      <span class="kicker">챙길 것</span>
-      <h2>가방에 넣자</h2>
-      <ul class="check">
-        <li>케이크 + 초 + 라이터</li><li>와인 + 오프너 + 잔</li><li>따뜻한 패딩, 목도리</li><li>신분증 (통일전망대 필수)</li><li>걷기 좋은 운동화</li><li>담요 (일출용)</li><li>카메라</li><li>간식 담을 가방</li>
-      </ul>
-    </div>
-
-    <p class="foot">메리 크리스마스 🎄<span class="k">나랑 놀면 재밌을거야🤍</span></p>
-  </section>
 </div>
 
 <script>
 (function(){
   var $ = function(id){ return document.getElementById(id); };
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var PW = '261018';
 
-  // ---- quiz ----
-  var QUIZ = [
-    { q: '우리가 처음 만난 날짜는?', a: ['2026년 10월 18일', '2026년 10월 11일', '2026년 9월 18일'], ok: 0 },
-    { q: '우리가 다음주에 할 데이트는?', a: ['헝거게임 영화보기', '오페라의 유령 뮤지컬 보러가기', '엉덩이로 이름쓰기'], ok: 0 },
-    { q: '은지가 좋아하는 불닭 레시피는?', a: ['불닭냉면', '불닭오믈렛', '까르보치즈불닭'], ok: 0 }
-  ];
-  var step = 0, busy = false;
-  var gate = $('gate'), quiz = $('quiz'), spy = $('spy'), locked = $('locked'), invite = $('invite'), plan = $('plan');
+  // ---- password gate ----
+  var gatewrap = $('gatewrap'), app = $('app'), pwForm = $('pwForm'), pwInput = $('pwInput'), pwErr = $('pwErr');
+  pwForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    if (pwInput.value.trim() === PW) {
+      gatewrap.hidden = true;
+      app.classList.add('show');
+    } else {
+      pwErr.textContent = '비밀번호가 틀렸어, 다시!';
+      pwForm.classList.remove('shake'); void pwForm.offsetWidth; pwForm.classList.add('shake');
+      pwInput.value = ''; pwInput.focus();
+    }
+  });
 
-  function shuffle(arr){ var a = arr.slice(); for (var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
-
-  function renderQ(){
-    var item = QUIZ[step];
-    $('qText').textContent = 'Q' + (step+1) + '. ' + item.q;
-    var dots = $('steps').children;
-    for (var i=0;i<dots.length;i++){ dots[i].className = i < step ? 'on' : (i === step ? 'now' : ''); }
-    var order = shuffle([0,1,2]);
-    var ul = $('opts'); ul.innerHTML = '';
-    var labels = ['가','나','다'];
-    order.forEach(function(idx, n){
-      var li = document.createElement('li');
-      var b = document.createElement('button');
-      b.type = 'button'; b.className = 'opt';
-      b.innerHTML = '<span class="k">' + labels[n] + '</span><span></span>';
-      b.lastChild.textContent = item.a[idx];
-      b.addEventListener('click', function(){ answer(idx === item.ok, b); });
-      li.appendChild(b); ul.appendChild(li);
+  // ---- top nav (목차) ----
+  var navBtns = document.querySelectorAll('.navbtn');
+  var pages = document.querySelectorAll('.page');
+  navBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      navBtns.forEach(function(b){ b.classList.toggle('active', b === btn); });
+      var target = btn.getAttribute('data-page');
+      pages.forEach(function(p){ p.classList.toggle('active', p.id === 'page-' + target); });
     });
-    $('okMsg').textContent = '';
-  }
-
-  function answer(correct, btn){
-    if (busy) return; busy = true;
-    if (!correct) { return bust(); }
-    btn.classList.add('ok');
-    var msgs = ['정답! 역시 세훈이네.', '짱짱맨 !! 역시 믿고 있었다구', '통과! 초대장 열어줄게.'];
-    $('okMsg').textContent = msgs[step];
-    setTimeout(function(){
-      step += 1; busy = false;
-      if (step >= QUIZ.length) { pass(); } else { renderQ(); }
-    }, 700);
-  }
-
-  function pass(){
-    gate.hidden = true;
-    invite.hidden = false;
-    window.scrollTo(0,0);
-  }
-
-  function bust(){
-    quiz.hidden = true; spy.hidden = false;
-    document.body.classList.add('danger');
-    if (reduce) { return setTimeout(lockOut, 600); }
-    spy.classList.add('spin');
-    setTimeout(function(){
-      var f = $('flash'); f.classList.add('on');
-      $('bang').classList.add('show');
-      if (navigator.vibrate) { try { navigator.vibrate([80,40,120]); } catch(e){} }
-      setTimeout(lockOut, 1400);
-    }, 1700);
-  }
-
-  function lockOut(){
-    spy.hidden = true; locked.hidden = false;
-    document.body.classList.add('danger');
-  }
-
-  renderQ();
-
-  // ---- RSVP ----
-  var joinBtn = $('joinBtn'), declineBtn = $('declineBtn'), againBtn = $('againBtn'), nag = $('nag'), accepted = $('accepted');
-  var count = 0;
-  var lines = [
-    '음… 한 번 더 생각해봐.', '진짜? 대게찜인데?', '눈사람도 같이 가고 싶대.',
-    '통일전망대는 신분증 챙겨야 하는데, 그건 내가 챙길게.', '봉포 바다 바로 앞인데 안 가면 아까워.', '대게찜… 봉포대게찜…',
-    '크리스마스에 조용한 데 가는 사람 생각보다 없어. 우리만 가자.', '그 버튼, 사실 아무 일도 안 일어나.',
-    '계속 눌러봐. 나는 기다릴 수 있어.', '일출 보러 담요 덮고 나가고 싶어.', '이쯤이면 그냥 함께하기 누르는 게 빠를걸.',
-    '아직도 생각 중이야? 11층 라운지 예약해야 하는데.', '…', '위에 빨간 버튼 보이지? 그거야. 🩵'
-  ];
-  function setNag(text){
-    nag.innerHTML = '';
-    var t = document.createElement('span'); t.textContent = text; nag.appendChild(t);
-    if (count > 0) { var c = document.createElement('span'); c.className = 'count'; c.textContent = '다시 생각한 횟수 ' + count; nag.appendChild(c); }
-  }
-  joinBtn.addEventListener('click', function(){
-    joinBtn.hidden = true; declineBtn.hidden = true; againBtn.hidden = true; nag.hidden = true;
-    accepted.style.display = 'block';
-    plan.hidden = false;
-    setTimeout(function(){ plan.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }); }, 80);
   });
-  declineBtn.addEventListener('click', function(){
-    declineBtn.hidden = true; againBtn.hidden = false; setNag(lines[0]); againBtn.focus();
-  });
-  againBtn.addEventListener('click', function(){
-    count += 1;
-    setNag(lines[Math.min(count, lines.length - 1)]);
-    againBtn.classList.remove('shake'); void againBtn.offsetWidth; againBtn.classList.add('shake');
-    var labels = ['다시 생각하기','한 번 더 생각하기','또 생각하기','진지하게 생각하기','마지막으로 생각하기','다시 생각하기'];
-    againBtn.textContent = labels[Math.min(count, labels.length - 1)];
-    if (count >= 6) { joinBtn.style.transform = 'scale(' + (1 + Math.min(count - 5, 8) * 0.04) + ')'; }
+
+  // ---- day swiper ----
+  var track = $('track'), dtabs = document.querySelectorAll('.dtab'), dotEls = document.querySelectorAll('.dots i');
+  var dayIdx = 0;
+  function setDay(i){
+    i = Math.max(0, Math.min(1, i));
+    dayIdx = i;
+    track.style.transform = 'translateX(-' + (i * 50) + '%)';
+    dtabs.forEach(function(b, n){ b.classList.toggle('active', n === i); });
+    dotEls.forEach(function(d, n){ d.classList.toggle('active', n === i); });
+  }
+  dtabs.forEach(function(b, n){ b.addEventListener('click', function(){ setDay(n); }); });
+
+  var sw = $('swiper'), startX = 0, startY = 0, dragging = false;
+  sw.addEventListener('touchstart', function(e){
+    startX = e.touches[0].clientX; startY = e.touches[0].clientY; dragging = true;
+  }, {passive:true});
+  sw.addEventListener('touchend', function(e){
+    if (!dragging) return; dragging = false;
+    var dx = e.changedTouches[0].clientX - startX;
+    var dy = e.changedTouches[0].clientY - startY;
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) {
+      setDay(dayIdx + (dx < 0 ? 1 : -1));
+    }
+  }, {passive:true});
+
+  // ---- timeline accordion ----
+  document.querySelectorAll('.titem .thead').forEach(function(head){
+    head.addEventListener('click', function(){
+      head.closest('.titem').classList.toggle('open');
+    });
   });
 })();
 </script>
